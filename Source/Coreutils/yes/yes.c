@@ -30,6 +30,8 @@
 */
 
 #include "utils.h"
+#include "aux.h"
+#include "info.h"
 
 #define PROGNAME "yes"
 #define OPTS "hi:n:V"
@@ -42,12 +44,13 @@ static char USAGE[] =
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
 
-static int nflag, iflag;
+DEFINE_FLAG(iflag);
+DEFINE_FLAG(nflag);
 
 int
 main(int argc, char *argv[])
 {
-	int c, secs;
+	int c, secs, printed = 0;
 	int max = 1;
 
 	while ((c = parse_options(OPTS)) != -1) {
@@ -57,11 +60,11 @@ main(int argc, char *argv[])
 				return EXIT_SUCCESS;
 				break;
 			case 'i':
-				iflag = 1;
+				iflag = FLAG_ON;
 				secs = atoi(optarg);
 				break;
 			case 'n':
-				nflag = 1;
+				nflag = FLAG_ON;
 				max = atoi(optarg);
 				break;
 			case 'V':
@@ -80,7 +83,7 @@ main(int argc, char *argv[])
 
 	for (int i = max; i > 0 ; i--) {
 		for (int j = 0; j < argc; j++)
-			print_and_space(argv[j], j, argc);
+			print_and_space(argv[j], printed++);
 		if (argc == 0)
 			fputs("y", stdout);
 		if (!nflag)

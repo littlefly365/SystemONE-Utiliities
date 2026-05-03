@@ -30,6 +30,8 @@
 */
 
 #include "utils.h"
+#include "aux.h"
+#include "info.h"
 
 #define PROGNAME "pwd"
 #define OPTS "hLPV"
@@ -42,7 +44,7 @@ static char USAGE[] =
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
 
-static int Lflag;
+DEFINE_FLAG(Lflag);
 
 int
 main(int argc, char *argv[])
@@ -56,10 +58,10 @@ main(int argc, char *argv[])
 				return EXIT_SUCCESS;
 				break;
 			case 'L':
-				Lflag = 1;
+				Lflag = FLAG_ON;
 				break;
 			case 'P':
-				Lflag = 0;
+				Lflag = FLAG_OFF;
 				break;
 			case 'V':
 				print_version(PROGNAME);

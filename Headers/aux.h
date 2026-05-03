@@ -29,56 +29,29 @@
 *  (BSD 3-Clause License)
 */
 
-#include "utils.h"
-#include "aux.h"
-#include "info.h"
+#ifndef _AUX_H
+#define _AUX_H	1
 
-#define PROGNAME "tty"
-#define OPTS "hsV"
+#include <stdio.h>
+#include <stdbool.h>
 
-static char USAGE[] =
-	"Usage: " PROGNAME "\n"
-	"or: " PROGNAME " [OPTION]\n"
-	"Print the file name of the terminal connected to standard input.\n\n"
-	"\t-s\t\trint nothing, only return an exit status\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit";
-
-DEFINE_FLAG(sflag);
-
-int
-main(int argc, char *argv[])
+static int
+print_and_space(char *string, int num)
 {
-	int c;
-	char *tty;
-	while ((c = parse_options(OPTS)) != -1) {
-		switch (c) {
-			case 'h':
-				puts(USAGE);
-				return EXIT_SUCCESS;
-				break;
-			case 's':
-				sflag = FLAG_ON;
-				break;
-			case 'V':
-				print_version(PROGNAME);
-				return EXIT_SUCCESS;
-				break;
-			default:
-				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
-				break;
-		}
-	}
-
-	tty = ttyname(STDIN_FILENO);
-	if (!sflag)
-		if (tty)
-			puts(tty);
-		else
-			puts("no a tty");
-	if (tty)
-		return EXIT_SUCCESS;
-	else
-		return EXIT_FAILURE;	
+	if (num > 0)
+		putchar(' ');
+	fputs(string, stdout);
+	return EXIT_SUCCESS;
 }
+
+#define parse_options(x)	getopt(argc, argv, x)
+#define print_version(x)	printf("%s (SystemONE) %s\n", x, PROG_VERSION)
+
+typedef bool flag_t;
+
+#define DEFINE_FLAG(name)	flag_t name = false
+
+#define FLAG_OFF false
+#define FLAG_ON  true
+
+#endif

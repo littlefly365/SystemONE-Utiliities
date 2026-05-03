@@ -30,6 +30,8 @@
 */
 
 #include "utils.h"
+#include "aux.h"
+#include "info.h"
 
 #define PROGNAME "sleep"
 #define OPTS "hs:vVq"
@@ -41,7 +43,8 @@ static char USAGE[] =
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
 
-static int vflag, sflag;
+DEFINE_FLAG(sflag);
+DEFINE_FLAG(vflag);
 
 int
 main(int argc, char *argv[])
@@ -54,18 +57,18 @@ main(int argc, char *argv[])
 				return EXIT_SUCCESS;
 				break;
 			case 's':
-				sflag = 1;
+				sflag = FLAG_ON;
 				nsecs = atoi(optarg);
 				break;
 			case 'v':
-				vflag = 1;
+				vflag = FLAG_ON;
 				break;
 			case 'V':
 				print_version(PROGNAME);
 				return EXIT_SUCCESS;
 				break;
 			case 'q':
-				vflag = 0;
+				vflag = FLAG_OFF;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);

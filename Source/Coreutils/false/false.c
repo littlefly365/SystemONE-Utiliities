@@ -30,6 +30,8 @@
 */
 
 #include "utils.h"
+#include "aux.h"
+#include "info.h"
 
 #define PROGNAME "false"
 #define OPTS "hV"

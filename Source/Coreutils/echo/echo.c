@@ -30,6 +30,8 @@
 */
 
 #include "utils.h"
+#include "aux.h"
+#include "info.h"
 
 #define PROGNAME "echo"
 #define OPTS "eEhnV"
@@ -45,20 +47,21 @@ static char USAGE[] =
 
 static int interpret_escapes(const char *input, char *output);
 
-static int nflag, eflag;
+DEFINE_FLAG(nflag);
+DEFINE_FLAG(eflag);
 
 int
 main(int argc, char *argv[])
 {
-	int c;
+	int c, printed = 0;
 	char buf[1024];
 	while ((c = parse_options(OPTS)) != -1) {
 		switch (c) {
 			case 'e':
-				eflag = 1;
+				eflag = FLAG_ON;
 				break;
 			case 'E':
-				eflag = 0;
+				eflag = FLAG_OFF;
 				break;
 			case 'h':
 				puts(USAGE);
@@ -84,9 +87,9 @@ main(int argc, char *argv[])
 	for (int i = 0; i < argc; i++) {
 		if (eflag) {
 			interpret_escapes(argv[i], buf);
-			print_and_space(buf, i, argc);
+			print_and_space(buf,printed++);
 		} else {
-			print_and_space(argv[i], i, argc);
+			print_and_space(argv[i], printed++);
 		}
 	}
 

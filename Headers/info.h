@@ -29,56 +29,46 @@
 *  (BSD 3-Clause License)
 */
 
-#include "utils.h"
-#include "aux.h"
-#include "info.h"
+#ifndef _INFO_H
+#define _INFO_H	1
 
-#define PROGNAME "tty"
-#define OPTS "hsV"
+#define PROG_VERSION	"1.0.0"
+#define SYSTEM_VERSION "1.0.0"
+#define PROJECT_VERSION "26.5"
+#define AUTHOR "littlefly365"
 
-static char USAGE[] =
-	"Usage: " PROGNAME "\n"
-	"or: " PROGNAME " [OPTION]\n"
-	"Print the file name of the terminal connected to standard input.\n\n"
-	"\t-s\t\trint nothing, only return an exit status\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit";
+#if defined(USERLAND_ARCH)
+#undef USERLAND_ARCH
+#endif
 
-DEFINE_FLAG(sflag);
+#if defined(__x86_64__)
+#define USERLAND_ARCH "x86_64"
+#elif defined(__i386__)
+#define USERLAND_ARCH "i386"
+#elif defined(__aarch64__)
+#define USERLAND_ARCH "aarch64"
+#elif defined(__arm__)
+#define USERLAND_ARCH "armv7l"
+#elif defined(__riscv) && (__riscv_xlen == 64)
+#define USERLAND_ARCH "riscv64"
+#elif defined(__ppc64__) && defined(__LITTLE_ENDIAN__)
+#define USERLAND_ARCH "ppc64le"
+#elif defined(__s390x__)
+#define USERLAND_ARCH "s390x"
+#elif defined(__loongarch64)
+#define USERLAND_ARCH "loongarch64"
+#elif defined(__mips64)
+#define USERLAND_ARCH "mips64"
+#elif defined(__sparc__) && (defined(__arch64__) || defined(__sparcv9))
+#define USERLAND_ARCH "sparc64"
+#else
+#define USERLAND_ARCH "unknown"
+#endif
 
-int
-main(int argc, char *argv[])
-{
-	int c;
-	char *tty;
-	while ((c = parse_options(OPTS)) != -1) {
-		switch (c) {
-			case 'h':
-				puts(USAGE);
-				return EXIT_SUCCESS;
-				break;
-			case 's':
-				sflag = FLAG_ON;
-				break;
-			case 'V':
-				print_version(PROGNAME);
-				return EXIT_SUCCESS;
-				break;
-			default:
-				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
-				break;
-		}
-	}
+#if defined(__linux__)
+#define OS_NAME "GNU/Linux"
+#else
+#define OS_NAME u.sysname
+#endif
 
-	tty = ttyname(STDIN_FILENO);
-	if (!sflag)
-		if (tty)
-			puts(tty);
-		else
-			puts("no a tty");
-	if (tty)
-		return EXIT_SUCCESS;
-	else
-		return EXIT_FAILURE;	
-}
+#endif

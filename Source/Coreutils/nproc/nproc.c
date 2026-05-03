@@ -30,6 +30,8 @@
 */
 
 #include "utils.h"
+#include "aux.h"
+#include "info.h"
 
 #define PROGNAME "nproc"
 #define OPTS "ahi:V"
@@ -43,7 +45,8 @@ static char USAGE[] =
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
 
-static int aflag;
+
+DEFINE_FLAG(aflag);
 
 int
 main(int argc, char *argv[])
@@ -53,7 +56,7 @@ main(int argc, char *argv[])
 	while ((c = parse_options(OPTS)) != -1) {
 		switch (c) {
 			case 'a':
-				aflag = 1;				
+				aflag = FLAG_ON;				
 				break;
 			case 'h':
 				puts(USAGE);

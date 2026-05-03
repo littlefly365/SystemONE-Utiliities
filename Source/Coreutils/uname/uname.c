@@ -30,6 +30,8 @@
 */
 
 #include "utils.h"
+#include "aux.h"
+#include "info.h"
 
 #define PROGNAME "uname"
 #define OPTS "ahimnoprsvV"
@@ -49,20 +51,24 @@ static const char USAGE[] =
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow the version information and exit";
 
-static int mflag, nflag, oflag, rflag, sflag, vflag;
+DEFINE_FLAG(mflag);
+DEFINE_FLAG(nflag);
+DEFINE_FLAG(oflag);
+DEFINE_FLAG(rflag);
+DEFINE_FLAG(sflag);
+DEFINE_FLAG(vflag);
 
 int
 main(int argc, char *argv[])
 {
-	int c;
-	int space = 1;
+	int c, space = 0;
 	struct utsname u;
 	if (uname(&u) != 0)
 		err(1, "uname");
 	while ((c = parse_options(OPTS)) != -1) {
 		switch (c) {
 			case 'a':
-				mflag = nflag = oflag = rflag = sflag = vflag = 1;
+				mflag = nflag = oflag = rflag = sflag = vflag = FLAG_ON;
 				break;
 			case 'h':
 				puts(USAGE);
@@ -71,22 +77,22 @@ main(int argc, char *argv[])
 			case 'i':
 			case 'p':
 			case 'm':
-				mflag = 1;
+				mflag = FLAG_ON;
 				break;
 			case 'n':
-				nflag = 1;
+				nflag = FLAG_ON;
 				break;
 			case 'o':
-				oflag = 1;
+				oflag = FLAG_ON;
 				break;
 			case 'r':
-				rflag = 1;
+				rflag = FLAG_ON;
 				break;
 			case 's':
-				sflag = 1;
+				sflag = FLAG_ON;
 				break;
 			case 'v':
-				vflag = 1;
+				vflag = FLAG_ON;
 				break;
 			case 'V':
 				print_version(PROGNAME);
@@ -99,19 +105,17 @@ main(int argc, char *argv[])
 		}
 	}
 
-	int counter = mflag + nflag + oflag + rflag + sflag + vflag;
-
 	if (sflag || argc == 1)
-		print_and_space(u.sysname, space, counter);
+		print_and_space(u.sysname, space++);
 	if (nflag)
-		print_and_space(u.nodename, space, counter);
+		print_and_space(u.nodename, space++);
 	if (rflag)
-		print_and_space(u.release, space, counter);
+		print_and_space(u.release, space++);
 	if (vflag)
-		print_and_space(u.version, space, counter);
+		print_and_space(u.version, space++);
 	if (mflag)
-		print_and_space(u.machine, space, counter);
+		print_and_space(u.machine, space++);
 	if (oflag)
-		fputs(OS_NAME, stdout);
+		print_and_space(OS_NAME, space++);
 	putchar('\n');
 }

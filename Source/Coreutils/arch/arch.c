@@ -30,6 +30,8 @@
 */
 
 #include "utils.h"
+#include "aux.h"
+#include "info.h"
 
 #define PROGNAME "arch"
 #define OPTS "bhluV"
@@ -55,7 +57,10 @@ static char ARCH_LIST[] =
 	"mips64\n"
 	"sparc64";
 	
-static int bflag, lflag, sflag, uflag;
+DEFINE_FLAG(bflag);
+DEFINE_FLAG(lflag);
+DEFINE_FLAG(sflag);
+DEFINE_FLAG(uflag);
 
 int
 main(int argc, char *argv[])
@@ -68,13 +73,13 @@ main(int argc, char *argv[])
 	while ((c = parse_options(OPTS)) != -1) {
 		switch (c) {
 			case 'b':
-				bflag = 1;
+				bflag = FLAG_ON;
 				break;
 			case 'l':
-				lflag = 1;
+				lflag = FLAG_ON;
 				break;
 			case 'u':
-				uflag = 1;
+				uflag = FLAG_ON;
 				break;
 			case 'h':
 				puts(USAGE);
