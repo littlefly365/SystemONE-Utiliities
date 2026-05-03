@@ -29,72 +29,60 @@
 *  (BSD 3-Clause License)
 */
 
-#ifndef _UTILS_H
-#define _UTILS_H	1
+#include "utils.h"
 
-#define _GNU_SOURCE
-#include <sys/utsname.h>
-#include <sys/param.h>
+#define PROGNAME "nproc"
+#define OPTS "ahi:V"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <libgen.h>
-#include <ctype.h>
-#include <err.h>
-#include <errno.h>
-#include <limits.h>
+static char USAGE[] =
+	"Usage: " PROGNAME " [OPTION]...\n"
+	"Print  the number of processing units available to the current process,\n"
+	"which may be less than the number of online processors.\n\n"
+	"\t-a\t\tprint the number of installed processors\n"
+	"\t-i\t\tif possible, exclude N processing units.  The result is guaranteed to be at least 1.\n"
+	"\t-h\t\tshow this help and exit\n"
+	"\t-V\t\tshow version information and exit";
 
-#define PROG_VERSION	"1.0.0"
-#define SYSTEM_VERSION "1.0.0"
-#define PROJECT_VERSION "26.5"
-#define AUTHOR "littlefly365"
+static int aflag;
 
-static int
-print_and_space(char *string, int num, int max)
+int
+main(int argc, char *argv[])
 {
-	fputs(string, stdout);
-	if (num + 1 < max)
-		putchar(' ');
+	int c, ignore = 0;
+	unsigned long nproc;
+	while ((c = parse_options(OPTS)) != -1) {
+		switch (c) {
+			case 'a':
+				aflag = 1;				
+				break;
+			case 'h':
+				puts(USAGE);
+				return EXIT_FAILURE;
+				break;
+			case 'i':
+				ignore = atoi(optarg);
+				break;
+			case 'V':
+				print_version(PROGNAME);
+				return EXIT_SUCCESS;
+				break;
+			default:
+				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
+				return EXIT_FAILURE;
+				break;
+			}
+		}
+	
+	if (aflag)
+		nproc = sysconf(_SC_NPROCESSORS_CONF);
+	else
+		nproc = sysconf(_SC_NPROCESSORS_ONLN);
+
+	if (nproc <= ignore)
+		nproc = 1;
+	else
+		nproc = nproc - ignore;	
+
+	printf("%u\n", nproc);
 	return EXIT_SUCCESS;
 }
-
-#define parse_options(x)	getopt(argc, argv, x)
-#define print_version(x)	printf("%s (SystemONE) %s\n", x, PROG_VERSION)
-
-#if defined(USERLAND_ARCH)
-#undef USERLAND_ARCH
-#endif
-
-#if defined(__x86_64__)
-#define USERLAND_ARCH "x86_64"
-#elif defined(__i386__)
-#define USERLAND_ARCH "i386"
-#elif defined(__aarch64__)
-#define USERLAND_ARCH "aarch64"
-#elif defined(__arm__)
-#define USERLAND_ARCH "armv7l"
-#elif defined(__riscv) && (__riscv_xlen == 64)
-#define USERLAND_ARCH "riscv64"
-#elif defined(__ppc64__) && defined(__LITTLE_ENDIAN__)
-#define USERLAND_ARCH "ppc64le"
-#elif defined(__s390x__)
-#define USERLAND_ARCH "s390x"
-#elif defined(__loongarch64)
-#define USERLAND_ARCH "loongarch64"
-#elif defined(__mips64)
-#define USERLAND_ARCH "mips64"
-#elif defined(__sparc__) && (defined(__arch64__) || defined(__sparcv9))
-#define USERLAND_ARCH "sparc64"
-#else
-#define USERLAND_ARCH "unknown"
-#endif
-
-#if defined(__linux__)
-#define OS_NAME "GNU/Linux"
-#else
-#define OS_NAME u.sysname
-#endif
-
-#endif

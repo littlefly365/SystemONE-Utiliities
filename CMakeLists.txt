@@ -4,7 +4,7 @@ project(SystemONE-Utilities VERSION 1.0.0 LANGUAGES C)
 
 include_directories(${CMAKE_SOURCE_DIR}/Headers)
 
-set(PROGRAMS 
+set(COREUTILS
 	arch 
 	dirname 
 	domainname 
@@ -17,10 +17,20 @@ set(PROGRAMS
 	pwd 
 	sleep 
 	true 
+	tty
 	uname 
 	yes
 )
 
-foreach(prog IN LISTS PROGRAMS)
-	add_executable(${prog} Source/${prog}/${prog}.c)
+set(CUSTOM
+	prime
+	SystemONE-version	
+)
+
+foreach(prog IN LISTS COREUTILS)
+	add_executable(${prog} Source/Coreutils/${prog}/${prog}.c)
+endforeach()
+
+foreach(prog IN LISTS CUSTOM)
+	add_executable(${prog} Source/Custom/${prog}/${prog}.c)
 endforeach()
