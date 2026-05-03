@@ -32,7 +32,7 @@
 #include "utils.h"
 
 #define PROGNAME "uname"
-#define OPTS "adhimnoprsvV"
+#define OPTS "ahimnoprsvV"
 
 static const char USAGE[] =
 	"Usage: " PROGNAME " [OPTION]... \n" 
@@ -40,7 +40,6 @@ static const char USAGE[] =
 	"\t-a\t\tprint all information, in the following order\n" 
 	"\t-s\t\tprint the kernel name\n" 
 	"\t-n\t\tprint the network node hostname\n" 
-	"\t-d\t\tprint the domain name\n" 
 	"\t-r\t\tprint the kernel release\n" 
 	"\t-v\t\tprint the kernel version\n" 
 	"\t-m\t\tprint the machine hardware name\n" 
@@ -50,7 +49,7 @@ static const char USAGE[] =
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow the version information and exit";
 
-static int dflag, mflag, nflag, oflag, rflag, sflag, vflag;
+static int mflag, nflag, oflag, rflag, sflag, vflag;
 
 int
 main(int argc, char *argv[])
@@ -63,10 +62,7 @@ main(int argc, char *argv[])
 	while ((c = parse_options(OPTS)) != -1) {
 		switch (c) {
 			case 'a':
-				dflag = mflag = nflag = oflag = rflag = sflag = vflag = 1;
-				break;
-			case 'd':
-				dflag = 1;
+				mflag = nflag = oflag = rflag = sflag = vflag = 1;
 				break;
 			case 'h':
 				puts(USAGE);
@@ -103,15 +99,12 @@ main(int argc, char *argv[])
 		}
 	}
 
-	int counter = dflag + mflag + nflag + oflag + rflag + sflag + vflag;
+	int counter = mflag + nflag + oflag + rflag + sflag + vflag;
 
 	if (sflag || argc == 1)
 		print_and_space(u.sysname, space, counter);
 	if (nflag)
 		print_and_space(u.nodename, space, counter);
-	if (dflag)
-		if (strcmp(u.domainname, "(none)") != 0)
-			print_and_space(u.domainname, space, counter);
 	if (rflag)
 		print_and_space(u.release, space, counter);
 	if (vflag)
