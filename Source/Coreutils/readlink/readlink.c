@@ -33,20 +33,20 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "hostname"
+#define PROGNAME "readlink"
 #define OPTS "hV"
 
 static char USAGE[] =
-	"Usage: " PROGNAME " [NAME] [OPTION]...\n"
-	"Show or set the system's host name.\n\n"
+	"Usage: " PROGNAME " [PATH] [OPTION]...\n"
+	"Print value of a symbolic link or canonical file name.\n\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
-	
 int
 main(int argc, char *argv[])
 {
 	int c;
-	char hostname[MAXHOSTNAMELEN];
+	int state = EXIT_SUCCESS;
+	char buf[PATH_MAX];
 	while ((c = parse_options(OPTS)) != -1) {
 		switch (c) {
 			case 'h':
@@ -59,23 +59,20 @@ main(int argc, char *argv[])
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_SUCCESS;
+				return EXIT_FAILURE;
 				break;
-			}
 		}
+	}
 
 	argc -= optind;
 	argv += optind;
 
-	if (*argv) { 
-		if (sethostname(*argv, strlen(*argv)))
-			err(1, "sethostname");
-		return EXIT_SUCCESS;
-	} else {
-		if (gethostname(hostname, sizeof(hostname)))
-			err(1, "gethostname");
-		puts(hostname);
+	for (int i = 0; i < argc; i++) {
+		if (readlink(argv[i], buf, sizeof(buf)) == -1)
+			state = EXIT_FAILURE;
+		else
+			puts(buf);
 	}
 
-	return EXIT_SUCCESS;
+	return state;
 }

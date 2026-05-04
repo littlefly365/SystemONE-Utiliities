@@ -6,6 +6,7 @@ include_directories(${CMAKE_SOURCE_DIR}/Headers)
 
 set(COREUTILS
 	arch 
+	basename
 	dirname 
 	domainname 
 	echo 
@@ -15,10 +16,14 @@ set(COREUTILS
 	hostname 
 	nproc 
 	pwd 
+	readlink
+	realpath
+	seq
 	sleep 
 	true 
 	tty
 	uname 
+	whoami
 	yes
 )
 

@@ -37,8 +37,7 @@
 #define OPTS "hV"
 
 static char USAGE[] =
-	"Usage: " PROGNAME "\n"
-	"or: " PROGNAME " [OPTION]\n"
+	"Usage: " PROGNAME " [OPTION]...\n"
 	"Exit with a status code indicating success.\n\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";

@@ -37,8 +37,7 @@
 #define OPTS "hs:vVq"
 
 static char USAGE[] =
-	"Usage: " PROGNAME " -s [SECONDS]\n"
-	"or: " PROGNAME " [OPTION]\n"
+	"Usage: " PROGNAME " -s [SECONDS] [OPTION]...\n"
 	"Pause  for NUMBER seconds, where NUMBER is an integer\n\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
@@ -79,7 +78,6 @@ main(int argc, char *argv[])
 
 	if (argc == 1||!sflag) {
 		fprintf(stderr, "%s: Argument is missing\n", PROGNAME);
-		fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
 		return EXIT_FAILURE;
 	}
 	

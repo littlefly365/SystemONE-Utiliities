@@ -37,8 +37,7 @@
 #define OPTS "hV"
 
 static char USAGE[] =
-	"Usage: " PROGNAME " [NUMBER]...\n"
-	"or: " PROGNAME " [OPTION]\n"
+	"Usage: " PROGNAME " [NUMBER]... [OPTION]...\n"
 	"Print the prime factors of each specified integer NUMBER.\n\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";

@@ -37,10 +37,10 @@
 #define OPTS "hLPV"
 
 static char USAGE[] =
-	"Usage: " PROGNAME " [OPTION]\n"
+	"Usage: " PROGNAME " [OPTION]...\n"
 	"Print the full filename of the current working directory.\n\n"
 	"\t-L\t\tuse PWD from environment, even if it contains symlinks\n"
-	"\t-P\t\tresolve all symlinks\n"
+	"\t-P\t\tresolve all symlinks (default)\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
 

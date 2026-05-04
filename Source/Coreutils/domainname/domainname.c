@@ -37,8 +37,7 @@
 #define OPTS "hV"
 
 static char USAGE[] =
-	"Usage: " PROGNAME " [NAME]\n"
-	"or: " PROGNAME " [OPTION]\n"
+	"Usage: " PROGNAME " [NAME] [OPTION]...\n"
 	"Show or set the system's domain name.\n\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";

@@ -37,8 +37,7 @@
 #define OPTS "hsV"
 
 static char USAGE[] =
-	"Usage: " PROGNAME "\n"
-	"or: " PROGNAME " [OPTION]\n"
+	"Usage: " PROGNAME " [OPTION]...\n"
 	"Print the file name of the terminal connected to standard input.\n\n"
 	"\t-s\t\trint nothing, only return an exit status\n"
 	"\t-h\t\tshow this help and exit\n"

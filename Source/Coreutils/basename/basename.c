@@ -33,20 +33,19 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "hostname"
+#define PROGNAME "basename"
 #define OPTS "hV"
 
 static char USAGE[] =
-	"Usage: " PROGNAME " [NAME] [OPTION]...\n"
-	"Show or set the system's host name.\n\n"
+	"Usage: " PROGNAME " [PATH] [OPTION]...\n"
+	"Print NAME with any leading directory components removed.\n\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
-	
 int
 main(int argc, char *argv[])
 {
 	int c;
-	char hostname[MAXHOSTNAMELEN];
+	char *path;
 	while ((c = parse_options(OPTS)) != -1) {
 		switch (c) {
 			case 'h':
@@ -59,22 +58,25 @@ main(int argc, char *argv[])
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_SUCCESS;
+				return EXIT_FAILURE;
 				break;
-			}
 		}
-
+	}
+	
 	argc -= optind;
 	argv += optind;
 
-	if (*argv) { 
-		if (sethostname(*argv, strlen(*argv)))
-			err(1, "sethostname");
-		return EXIT_SUCCESS;
-	} else {
-		if (gethostname(hostname, sizeof(hostname)))
-			err(1, "gethostname");
-		puts(hostname);
+	if (argc == 0) {
+		fprintf(stderr, "%s: Argument is missing\n", PROGNAME);
+		return EXIT_FAILURE;
+	}
+
+	for (int i = 0; i < argc; i++) {
+		path = argv[i];
+		if (path[i] == '\0')
+			puts("");
+		else
+			puts(basename(argv[i]));
 	}
 
 	return EXIT_SUCCESS;

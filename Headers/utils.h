@@ -45,5 +45,6 @@
 #include <err.h>
 #include <errno.h>
 #include <limits.h>
+#include <pwd.h>
 
 #endif

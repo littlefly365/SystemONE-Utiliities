@@ -33,25 +33,31 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "hostname"
-#define OPTS "hV"
+#define PROGNAME "whoami"
+#define OPTS "hrV"
 
 static char USAGE[] =
-	"Usage: " PROGNAME " [NAME] [OPTION]...\n"
-	"Show or set the system's host name.\n\n"
+	"Usage: " PROGNAME " [OPTION]...\n"
+	"Display the username of the current user.\n\n"
+	"\t-r\t\tuse real UID instead of effective\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
-	
+
+DEFINE_FLAG(rflag);
+
 int
 main(int argc, char *argv[])
 {
 	int c;
-	char hostname[MAXHOSTNAMELEN];
+	uid_t uid;
 	while ((c = parse_options(OPTS)) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);
 				return EXIT_SUCCESS;
+				break;
+			case 'r':
+				rflag = FLAG_ON;
 				break;
 			case 'V':
 				print_version(PROGNAME);
@@ -59,23 +65,19 @@ main(int argc, char *argv[])
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_SUCCESS;
+				return EXIT_FAILURE;
 				break;
-			}
 		}
-
-	argc -= optind;
-	argv += optind;
-
-	if (*argv) { 
-		if (sethostname(*argv, strlen(*argv)))
-			err(1, "sethostname");
-		return EXIT_SUCCESS;
-	} else {
-		if (gethostname(hostname, sizeof(hostname)))
-			err(1, "gethostname");
-		puts(hostname);
 	}
+	
+	if (rflag)
+		uid = getuid();
+	else
+		uid = geteuid();
 
+	struct passwd *pw = getpwuid(uid);
+	if (!pw)
+		err(1, "getpwuid");
+	puts(pw->pw_name);
 	return EXIT_SUCCESS;
 }

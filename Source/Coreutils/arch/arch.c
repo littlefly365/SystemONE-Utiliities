@@ -37,7 +37,7 @@
 #define OPTS "bhluV"
 
 static char USAGE[] =
-	"Usage: " PROGNAME " [OPTION]\n"
+	"Usage: " PROGNAME " [OPTION]...\n"
 	"print system architecture\n\n"
 	"\t-b\t\tprint bit width (32/64)\n"
 	"\t-l\t\tprint available architecture list\n"

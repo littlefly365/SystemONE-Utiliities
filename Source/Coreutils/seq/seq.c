@@ -33,20 +33,20 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "hostname"
+#define PROGNAME "seq"
 #define OPTS "hV"
 
 static char USAGE[] =
-	"Usage: " PROGNAME " [NAME] [OPTION]...\n"
-	"Show or set the system's host name.\n\n"
+	"Usage: " PROGNAME " [LAST] [OPTION]...\n"
+	"or: " PROGNAME " [FIRST] [LAST] [OPTION]...\n"
+	"or: " PROGNAME " [FIRST] [INCREMENT] [LAST] [OPTION]...\n"
+	"Print numbers from FIRST to LAST.\n\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
-	
 int
 main(int argc, char *argv[])
 {
-	int c;
-	char hostname[MAXHOSTNAMELEN];
+	int c, num1 = 1, num2, step = 1;
 	while ((c = parse_options(OPTS)) != -1) {
 		switch (c) {
 			case 'h':
@@ -59,23 +59,42 @@ main(int argc, char *argv[])
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_SUCCESS;
+				return EXIT_FAILURE;
 				break;
-			}
 		}
-
+	}
+	
 	argc -= optind;
 	argv += optind;
 
-	if (*argv) { 
-		if (sethostname(*argv, strlen(*argv)))
-			err(1, "sethostname");
-		return EXIT_SUCCESS;
-	} else {
-		if (gethostname(hostname, sizeof(hostname)))
-			err(1, "gethostname");
-		puts(hostname);
+	if (argc == 0) {
+		fprintf(stderr, "%s: Argument is missing\n", PROGNAME);	
+		return EXIT_FAILURE;
+	}
+	
+	else if (argc == 1)
+		num2 = atoi(argv[0]);
+	else if (argc >= 2) {
+		num1 = atoi(argv[0]);
+		if (argc >= 3) {
+			step = atoi(argv[1]);
+			num2 = atoi(argv[2]);
+		} else
+			num2 = atoi(argv[1]);
+	}
+	
+	if (step == 0) {
+		fprintf(stderr, "%s: invalid Zero increment value: «0»\n", PROGNAME);
+		return EXIT_FAILURE;
 	}
 
-	return EXIT_SUCCESS;
+	else if (step > 0)
+		for (int i = num1; i <= num2; i+=step)
+			printf("%d\n", i);
+	else if (step < 0) {
+		fprintf(stderr, "%s: increment value must be and postive integer\n", PROGNAME);
+		return EXIT_SUCCESS;
+	}	
+
+	return EXIT_SUCCESS;	
 }

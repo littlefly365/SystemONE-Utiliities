@@ -37,8 +37,7 @@
 #define OPTS "hV"
 
 static char USAGE[] =
-	"Usage: " PROGNAME " [PATH]\n"
-	"or: " PROGNAME " [OPTION]\n" 
+	"Usage: " PROGNAME " [PATH] [OPTION]...\n"
 	"Print the directory portion of a pathname.\n\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
@@ -66,7 +65,6 @@ main(int argc, char *argv[])
 	
 	if (argc == 1) {
 		fprintf(stderr, "%s: Argument is missing\n", PROGNAME);
-		fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
 		return EXIT_FAILURE;
 	}
 
