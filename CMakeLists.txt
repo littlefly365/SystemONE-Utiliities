@@ -7,6 +7,7 @@ include_directories(${CMAKE_SOURCE_DIR}/Headers)
 set(COREUTILS
 	arch 
 	basename
+	cat
 	dirname 
 	domainname 
 	echo 

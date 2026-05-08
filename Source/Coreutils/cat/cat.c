@@ -29,22 +29,49 @@
 *  (BSD 3-Clause License)
 */
 
-#ifndef _UTILS_H
-#define _UTILS_H	1
+#include "utils.h"
+#include "aux.h"
+#include "info.h"
 
-#include <sys/utsname.h>
-#include <sys/param.h>
+#define PROGNAME "cat"
+#define OPTS "hV"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <libgen.h>
-#include <ctype.h>
-#include <err.h>
-#include <errno.h>
-#include <limits.h>
-#include <pwd.h>
-#include <fcntl.h>
+static char USAGE[] =
+	"Usage: " PROGNAME " [OPTION]...\n"
+	" Concatenate FILE(s) to standard output.\n\n"
+	"\t-h\t\tshow this help and exit\n"
+	"\t-V\t\tshow version information and exit";
+int
+main(int argc, char *argv[])
+{
+	int c, fd;
+	char buf[4096];
+	ssize_t size;
+	while ((c = parse_options(OPTS)) != -1) {
+		switch (c) {
+			case 'h':
+				puts(USAGE);
+				return EXIT_SUCCESS;
+				break;
+			case 'V':
+				print_version(PROGNAME);
+				return EXIT_SUCCESS;
+				break;
+			default:
+				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
+				return EXIT_FAILURE;
+				break;
+		}
+	}
 
-#endif
+	for (int i = 1; i < argc; ++i) {
+		fd = open(argv[i], O_RDONLY);
+		if (fd < 0)
+			err(1, argv[i]);
+		while ((size = read(fd, buf, sizeof(buf))) > 0)
+			write(STDOUT_FILENO, buf, size);
+		close(fd);
+	}
+
+	return EXIT_SUCCESS;
+}
