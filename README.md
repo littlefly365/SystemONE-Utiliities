@@ -1,7 +1,7 @@
 # SystemONE Utilities
 
 SystemONE-Utilities is a set of common unix utilities (like echo, pwd, uname). the motto of this project is
-"Simple as BSD, useful as GNU". This utilities are not completely posix, in some of the concept is the same 
+"Simple as BSD, useful as GNU". This utilities are not completely posix, in some of them the concept is the same 
 but the flags or implementation is different, examples of this are:
 
 - sleep
