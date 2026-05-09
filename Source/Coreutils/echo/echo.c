@@ -34,7 +34,6 @@
 #include "info.h"
 
 #define PROGNAME "echo"
-#define OPTS "eEhnV"
 
 static char USAGE[] =
 	"Usage: " PROGNAME " [OPTION]... [STRING]...\n"
@@ -55,7 +54,7 @@ main(int argc, char *argv[])
 {
 	int c, printed = 0;
 	char buf[1024];
-	while ((c = parse_options(OPTS)) != -1) {
+	while ((c = getopt(argc, argv, "eEhnV")) != -1) {
 		switch (c) {
 			case 'e':
 				eflag = FLAG_ON;

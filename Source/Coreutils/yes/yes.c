@@ -34,7 +34,6 @@
 #include "info.h"
 
 #define PROGNAME "yes"
-#define OPTS "hi:n:V"
 
 static char USAGE[] =
 	"Usage: yes [OPTION] [STRING]...\n"
@@ -53,7 +52,7 @@ main(int argc, char *argv[])
 	int c, secs, printed = 0;
 	int max = 1;
 
-	while ((c = parse_options(OPTS)) != -1) {
+	while ((c = getopt(argc, argv, "hi:n:V")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);

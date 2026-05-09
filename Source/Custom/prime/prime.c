@@ -34,7 +34,6 @@
 #include "info.h"
 
 #define PROGNAME "prime"
-#define OPTS "hV"
 
 static char USAGE[] =
 	"Usage: " PROGNAME " [NUMBER]\n"
@@ -48,7 +47,7 @@ main(int argc, char *argv[])
 {
 	int c;
 	int prime, num = 3, not_is_prime;
-	while ((c = parse_options(OPTS)) != -1) {
+	while ((c = getopt(argc, argv, "hV")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);	

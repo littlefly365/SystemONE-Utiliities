@@ -34,7 +34,6 @@
 #include "info.h"
 
 #define PROGNAME "domainname"
-#define OPTS "hV"
 
 static char USAGE[] =
 	"Usage: " PROGNAME " [NAME] [OPTION]...\n"
@@ -47,7 +46,7 @@ main(int argc, char *argv[])
 {
 	int c;
 	char domainname[MAXHOSTNAMELEN];
-	while ((c = parse_options(OPTS)) != -1) {
+	while ((c = getopt(argc, argv, "hV")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);
@@ -67,14 +66,14 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
-	if (*argv) { 
-		if (setdomainname(*argv, strlen(*argv)))
-			err(1, "setdomainname");
-		return EXIT_SUCCESS;
-	} else {
+	if (argc <= 0) { 
 		if (getdomainname(domainname, sizeof(domainname)))
 			err(1, "getdomainname");
 		puts(domainname);
+	} else {
+		if (setdomainname(*argv, strlen(*argv)))
+			err(1, "setdomainname");
+		return EXIT_SUCCESS;
 	}
 
 	return EXIT_SUCCESS;

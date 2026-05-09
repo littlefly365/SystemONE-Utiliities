@@ -34,7 +34,6 @@
 #include "info.h"
 
 #define PROGNAME "pwd"
-#define OPTS "hLPV"
 
 static char USAGE[] =
 	"Usage: " PROGNAME " [OPTION]...\n"
@@ -51,7 +50,7 @@ main(int argc, char *argv[])
 {
 	int c;
 	char *pwd;
-	while ((c = parse_options(OPTS)) != -1) {
+	while ((c = getopt(argc, argv, "hLPV")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);

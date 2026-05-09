@@ -34,7 +34,6 @@
 #include "info.h"
 
 #define PROGNAME "sleep"
-#define OPTS "hs:vVq"
 
 static char USAGE[] =
 	"Usage: " PROGNAME " -s [SECONDS] [OPTION]...\n"
@@ -43,21 +42,26 @@ static char USAGE[] =
 	"\t-V\t\tshow version information and exit";
 
 DEFINE_FLAG(sflag);
+DEFINE_FLAG(mflag);
 DEFINE_FLAG(vflag);
 
 int
 main(int argc, char *argv[])
 {
-	int c, nsecs;
-	while ((c = parse_options(OPTS)) != -1) {
+	int c, secs;
+	while ((c = getopt(argc, argv, "hms:vVq")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);
 				return EXIT_SUCCESS;
 				break;
+			case 'm':
+				mflag = FLAG_ON;
+				secs = atoi(optarg);
+				break;
 			case 's':
 				sflag = FLAG_ON;
-				nsecs = atoi(optarg);
+				secs = atoi(optarg);
 				break;
 			case 'v':
 				vflag = FLAG_ON;
@@ -75,15 +79,26 @@ main(int argc, char *argv[])
 				break;
 		}
 	}
+	
+	argc -= optind;
+	argv += optind;
 
-	if (argc == 1||!sflag) {
+	if (argc == 0||!sflag||!mflag) {
 		fprintf(stderr, "%s: Argument is missing\n", PROGNAME);
 		return EXIT_FAILURE;
 	}
 	
-	if (vflag)
-		printf("Sleeping for %d seconds...\n", nsecs);
-	
-	sleep(nsecs);
+	if (vflag) {
+		printf("Sleeping for %d ", secs);
+		if (mflag)
+			printf("minutes...\n");
+		else
+			printf("seconds...\n");
+	}
+
+	if (mflag)
+		secs = secs * 60;
+
+	sleep(secs);
 	return EXIT_SUCCESS;
 }

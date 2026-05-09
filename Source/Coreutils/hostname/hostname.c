@@ -34,7 +34,6 @@
 #include "info.h"
 
 #define PROGNAME "hostname"
-#define OPTS "hV"
 
 static char USAGE[] =
 	"Usage: " PROGNAME " [NAME] [OPTION]...\n"
@@ -47,7 +46,7 @@ main(int argc, char *argv[])
 {
 	int c;
 	char hostname[MAXHOSTNAMELEN];
-	while ((c = parse_options(OPTS)) != -1) {
+	while ((c = getopt(argc, argv, "hV")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);

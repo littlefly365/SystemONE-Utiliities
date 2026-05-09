@@ -34,7 +34,6 @@
 #include "info.h"
 
 #define PROGNAME "factor"
-#define OPTS "hV"
 
 static char USAGE[] =
 	"Usage: " PROGNAME " [NUMBER]... [OPTION]...\n"
@@ -51,7 +50,7 @@ main(int argc, char *argv[])
 	unsigned long long num;
 	errno = 0;
 	int status = EXIT_SUCCESS;
-	while ((c = parse_options(OPTS)) != -1) {
+	while ((c = getopt(argc, argv, "hV")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);

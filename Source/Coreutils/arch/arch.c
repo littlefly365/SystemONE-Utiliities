@@ -34,52 +34,27 @@
 #include "info.h"
 
 #define PROGNAME "arch"
-#define OPTS "bhluV"
 
 static char USAGE[] =
 	"Usage: " PROGNAME " [OPTION]...\n"
 	"print system architecture\n\n"
 	"\t-b\t\tprint bit width (32/64)\n"
-	"\t-l\t\tprint available architecture list\n"
-	"\t-u\t\tprint userland architecture\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
 
-static char ARCH_LIST[] =
-	"x86_64\n"
-	"i386\n"
-	"aarch64\n"
-	"armv7l\n"
-	"riscv64\n"
-	"ppc64le\n"
-	"s390x\n"
-	"loongarch64\n"
-	"mips64\n"
-	"sparc64";
-	
 DEFINE_FLAG(bflag);
-DEFINE_FLAG(lflag);
-DEFINE_FLAG(sflag);
-DEFINE_FLAG(uflag);
 
 int
 main(int argc, char *argv[])
 {
 	int c;
-	char *print;
 	struct utsname u;
 	if (uname(&u) != 0)
 		err(1, "uname");
-	while ((c = parse_options(OPTS)) != -1) {
+	while ((c = getopt(argc, argv, "bhV")) != -1) {
 		switch (c) {
 			case 'b':
 				bflag = FLAG_ON;
-				break;
-			case 'l':
-				lflag = FLAG_ON;
-				break;
-			case 'u':
-				uflag = FLAG_ON;
 				break;
 			case 'h':
 				puts(USAGE);
@@ -99,17 +74,10 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
-	if (argc == 1)
-		print = *argv;
-	else if (bflag)
+	if (bflag)
 		printf("%zu\n", sizeof(void*) * 8);
-	else if (lflag)
-		print = ARCH_LIST;
-	else if (uflag)
-		print = USERLAND_ARCH;
 	else
-		print = u.machine;
-	if (!bflag)
-		puts(print);
+		puts(u.machine);
+
 	return EXIT_SUCCESS;
 }

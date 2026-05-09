@@ -34,7 +34,6 @@
 #include "info.h"
 
 #define PROGNAME "false"
-#define OPTS "hV"
 
 static char USAGE[] =
 	"Usage: " PROGNAME "\n"
@@ -46,7 +45,7 @@ int
 main(int argc, char *argv[])
 {
 	int c;
-	while ((c = parse_options(OPTS)) != -1) {
+	while ((c = getopt(argc, argv, "hV")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);
@@ -57,7 +56,6 @@ main(int argc, char *argv[])
 				return EXIT_FAILURE;
 				break;
 			default:
-				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
 				return EXIT_FAILURE;
 				break;
 		}

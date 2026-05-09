@@ -34,7 +34,6 @@
 #include "info.h"
 
 #define PROGNAME "dirname"
-#define OPTS "hV"
 
 static char USAGE[] =
 	"Usage: " PROGNAME " [PATH] [OPTION]...\n"
@@ -46,7 +45,7 @@ main(int argc, char *argv[])
 {
 	int c;
 	char *dir;
-	while ((c = parse_options(OPTS)) != -1) {
+	while ((c = getopt(argc, argv, "hV")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);

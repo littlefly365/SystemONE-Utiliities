@@ -50,7 +50,7 @@ main(int argc, char *argv[])
 {
 	int c;
 	char *tty;
-	while ((c = parse_options(OPTS)) != -1) {
+	while ((c = getopt(argc, argv, "hsV")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);

@@ -35,21 +35,17 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-static int
+static void
 print_and_space(char *string, int num)
 {
-	if (num > 0)
+	if (num)
 		putchar(' ');
 	fputs(string, stdout);
-	return EXIT_SUCCESS;
 }
 
-#define parse_options(x)	getopt(argc, argv, x)
-#define print_version(x)	printf("%s (SystemONE) %s\n", x, PROG_VERSION)
+#define print_version(x)		printf("%s (SystemONE) %s\n", x, PROG_VERSION)
 
-typedef bool flag_t;
-
-#define DEFINE_FLAG(name)	flag_t name = false
+#define DEFINE_FLAG(name)	bool name = false
 
 #define FLAG_OFF false
 #define FLAG_ON  true

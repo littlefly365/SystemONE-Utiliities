@@ -34,14 +34,13 @@
 #include "info.h"
 
 #define PROGNAME "nproc"
-#define OPTS "ahi:V"
 
 static char USAGE[] =
 	"Usage: " PROGNAME " [OPTION]...\n"
 	"Print  the number of processing units available to the current process,\n"
 	"which may be less than the number of online processors.\n\n"
 	"\t-a\t\tprint the number of installed processors\n"
-	"\t-i\t\tif possible, exclude N processing units.  The result is guaranteed to be at least 1.\n"
+	"\t-i\t\tif possible, exclude N processing units. The result is guaranteed to be at least 1.\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
 
@@ -53,7 +52,7 @@ main(int argc, char *argv[])
 {
 	int c, ignore = 0;
 	unsigned long nproc;
-	while ((c = parse_options(OPTS)) != -1) {
+	while ((c = getopt(argc, argv, "ahi:v")) != -1) {
 		switch (c) {
 			case 'a':
 				aflag = FLAG_ON;				

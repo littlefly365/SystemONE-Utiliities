@@ -65,7 +65,7 @@ main(int argc, char *argv[])
 	struct utsname u;
 	if (uname(&u) != 0)
 		err(1, "uname");
-	while ((c = parse_options(OPTS)) != -1) {
+	while ((c = getopt(argc, argv, "ahimnoprsvV")) != -1) {
 		switch (c) {
 			case 'a':
 				mflag = nflag = oflag = rflag = sflag = vflag = FLAG_ON;
