@@ -33,7 +33,6 @@
 #define _AUX_H	1
 
 #include <stdio.h>
-#include <stdbool.h>
 
 static void
 print_and_space(char *string, int num)
@@ -45,9 +44,10 @@ print_and_space(char *string, int num)
 
 #define print_version(x)		printf("%s (SystemONE) %s\n", x, PROG_VERSION)
 
-#define DEFINE_FLAG(name)	bool name = false
 
-#define FLAG_OFF false
-#define FLAG_ON  true
+#define DEFINE_FLAG(name)	bool name = 0
+
+#define FLAG_OFF 0
+#define FLAG_ON  1
 
 #endif
