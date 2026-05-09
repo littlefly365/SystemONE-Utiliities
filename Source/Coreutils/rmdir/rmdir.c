@@ -33,20 +33,18 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "realpath"
+#define PROGNAME "rmdir"
 #define OPTS "hV"
 
 static char USAGE[] =
-	"Usage: " PROGNAME " [PATH] [OPTION]...\n"
-	"Print the resolved absolute file name.\n\n"
+	"Usage: " PROGNAME " [OPTION]...\n"
+	"Remove the DIRECTORY(ies), if they are empty.\n\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
 int
 main(int argc, char *argv[])
 {
-	int c;
-	int status = EXIT_SUCCESS;
-	char buf[PATH_MAX];
+	int c, status = EXIT_SUCCESS;
 	while ((c = parse_options(OPTS)) != -1) {
 		switch (c) {
 			case 'h':
@@ -63,16 +61,15 @@ main(int argc, char *argv[])
 				break;
 		}
 	}
-
+	
 	argc -= optind;
 	argv += optind;
 
 	for (int i = 0; i < argc; i++) {
-		if (realpath(argv[i], buf)) {
-			snprintf(buf, sizeof(buf), "%s/%s", getcwd(NULL, 0), argv[i]);
-		} 
-
-		puts(buf);
+		if (rmdir(argv[i]) != 0) {
+			warn("failed to remove '%s'", argv[i]);
+			status = EXIT_FAILURE;
+		}
 	}
 
 	return status;

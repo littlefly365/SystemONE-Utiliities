@@ -45,7 +45,7 @@ int
 main(int argc, char *argv[])
 {
 	int c;
-	int state = EXIT_SUCCESS;
+	int status = EXIT_SUCCESS;
 	char buf[PATH_MAX];
 	while ((c = parse_options(OPTS)) != -1) {
 		switch (c) {
@@ -69,10 +69,10 @@ main(int argc, char *argv[])
 
 	for (int i = 0; i < argc; i++) {
 		if (readlink(argv[i], buf, sizeof(buf)) == -1)
-			state = EXIT_FAILURE;
+			status = EXIT_FAILURE;
 		else
 			puts(buf);
 	}
 
-	return state;
+	return status;
 }

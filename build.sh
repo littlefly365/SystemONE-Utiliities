@@ -48,7 +48,11 @@ build()
 	check_command "cmake"
 	cmake ..
 	check_command "make"
-	make
+	if check_command "nproc"; then
+		make -j$(nproc)
+	else
+		make
+	fi
 }
 
 clean()

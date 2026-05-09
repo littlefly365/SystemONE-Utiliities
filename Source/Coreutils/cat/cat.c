@@ -47,6 +47,7 @@ main(int argc, char *argv[])
 	int c, fd;
 	char buf[4096];
 	ssize_t size;
+	int status = EXIT_SUCCESS;
 	while ((c = parse_options(OPTS)) != -1) {
 		switch (c) {
 			case 'h':
@@ -63,15 +64,20 @@ main(int argc, char *argv[])
 				break;
 		}
 	}
+	
+	argc -= optind;
+	argv += optind;
 
-	for (int i = 1; i < argc; ++i) {
+	for (int i = 0; i < argc; ++i) {
 		fd = open(argv[i], O_RDONLY);
-		if (fd < 0)
-			err(1, argv[i]);
+		if (fd < 0) {
+			warn(argv[i]);
+			status = EXIT_FAILURE;
+		}
 		while ((size = read(fd, buf, sizeof(buf))) > 0)
 			write(STDOUT_FILENO, buf, size);
 		close(fd);
 	}
 
-	return EXIT_SUCCESS;
+	return status;
 }

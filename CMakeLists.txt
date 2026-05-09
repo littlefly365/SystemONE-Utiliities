@@ -15,10 +15,12 @@ set(COREUTILS
 	false 
 	hostid 
 	hostname 
+	link
 	nproc 
 	pwd 
 	readlink
 	realpath
+	rmdir
 	seq
 	sleep 
 	true 
