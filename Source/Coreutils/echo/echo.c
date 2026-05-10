@@ -39,29 +39,18 @@ static char USAGE[] =
 	"Usage: " PROGNAME " [OPTION]... [STRING]...\n"
 	"Echo the STRING(s) to standard output.\n\n"
 	"\t-n\t\tdo not print newline\n"
-	"\t-e\t\tenable interpretation of backslash escapes\n"
-	"\t-E\t\tdisable interpretation of backslash escapes (default)\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
 
-static int interpret_escapes(const char *input, char *output);
-
 DEFINE_FLAG(nflag);
-DEFINE_FLAG(eflag);
 
 int
 main(int argc, char *argv[])
 {
 	int c, printed = 0;
 	char buf[1024];
-	while ((c = getopt(argc, argv, "eEhnV")) != -1) {
+	while ((c = getopt(argc, argv, "hnV")) != -1) {
 		switch (c) {
-			case 'e':
-				eflag = FLAG_ON;
-				break;
-			case 'E':
-				eflag = FLAG_OFF;
-				break;
 			case 'h':
 				puts(USAGE);
 				return SUCCESS;
@@ -84,48 +73,10 @@ main(int argc, char *argv[])
 	argv += optind;
 
 	for (int i = 0; i < argc; i++) {
-		if (eflag) {
-			interpret_escapes(argv[i], buf);
-			print_and_space(buf,printed++);
-		} else {
-			print_and_space(argv[i], printed++);
-		}
+		print_and_space(argv[i], printed++);
 	}
 
 	if (!nflag)
 		putchar('\n');
-	return SUCCESS;
-}
-
-static int
-interpret_escapes(const char *input, char *output)
-{
-	const char *string = input;
-	char *dest = output;
-
-	while (*string) {
-		if (*string == '\\' && *(string + 1)) {
-			switch (*(string + 1)) {
-				case 'n':
-					*dest++ = '\n';
-					string += 2;
-					break;
-				case 't':
-					*dest++ = '\t';
-					string += 2;
-					break;
-				case '\\':
-					*dest++ = '\\';
-					string += 2;
-					break;
-				default:
-					*dest++ = *string++;
-					break;
-			}
-	} else {
-		*dest++ = *string++;
-		}
-	}
-	dest = '\0';
 	return SUCCESS;
 }
