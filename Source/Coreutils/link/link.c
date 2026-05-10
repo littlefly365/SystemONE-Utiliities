@@ -55,14 +55,20 @@ main(int argc, char *argv[])
 				return SUCCESS;
 				break;
 			default:
-				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return FAIL;
+				try_msg();
 				break;
 		}
 	}
 
 	argc -= optind;
 	argv += optind;
+
+	if (argc == 0)
+		fprintf(stderr, "%s: missing operand\n", PROGNAME);
+	if (argc == 1)
+		fprintf(stderr, "%s: missing operand after '%s'\n", PROGNAME, argv[0]);
+	if (argc <= 1)
+		try_msg();
 
 	if (link(argv[0], argv[1]) != 0) {
 		warn("cannot create link '%s' to '%s'", argv[1], argv[0]);

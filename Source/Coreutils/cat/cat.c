@@ -58,8 +58,7 @@ main(int argc, char *argv[])
 				return SUCCESS;
 				break;
 			default:
-				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return FAIL;
+				try_msg();
 				break;
 		}
 	}
