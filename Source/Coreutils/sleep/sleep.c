@@ -36,8 +36,10 @@
 #define PROGNAME "sleep"
 
 static char USAGE[] =
-	"Usage: " PROGNAME " -s [SECONDS] [OPTION]...\n"
+	"Usage: " PROGNAME " [OPTION]... [-s/-m] [SECONDS/MINUTES]\n"
 	"Pause  for NUMBER seconds, where NUMBER is an integer\n\n"
+	"\t-s\t\tsleep for x seconds"
+	"\t-m\t\tsleep for x minutes\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
 
@@ -49,7 +51,7 @@ int
 main(int argc, char *argv[])
 {
 	int c, secs;
-	while ((c = getopt(argc, argv, "hms:vVq")) != -1) {
+	while ((c = getopt(argc, argv, "hm:s:vVq")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);
@@ -82,21 +84,23 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 	
-	if (argc == 0) {
+	if (argc == 0 && !sflag && !mflag) {
 		fprintf(stderr, "%s: missing operand\n", PROGNAME);
 		try_msg();
-		return FAIL;
 	}
 
 	if (argc == 1 && !sflag && !mflag)
-		secs = atoi(argv[1]);
+		secs = atoi(argv[0]);
 
 	if (vflag) {
 		printf("Sleeping for %d ", secs);
-		if (mflag)
-			printf("minutes...\n");
-		else
-			printf("seconds...\n");
+		if (mflag) 
+			printf("minute");
+		else 
+			printf("second");
+		if (secs > 1)
+			printf("s");
+		printf("...\n");
 	}
 
 	if (mflag)
