@@ -55,24 +55,26 @@ main(int argc, char *argv[])
 				return SUCCESS;
 				break;
 			default:
-				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return FAIL;
+				try_msg();
 				break;
 		}
 	}
 
-	if (argc == 1) {
+	argc -= optind;
+	argv += optind;
+
+	if (argc == 0) {
 		fprintf(stderr, "%s: missing operand\n", PROGNAME);
-		return FAIL;
+		try_msg();
 	}
 
-	if (argc >= 3) {
+	if (argc > 1) {
 		fprintf(stderr, "%s: extra operand '%s'\n", PROGNAME, argv[2]);
-		return FAIL;
+		try_msg();
 	}
 
-	if (unlink(argv[1]) != 0) {
-		warn("cannot unlink '%s'", argv[1]);
+	if (unlink(argv[0]) != 0) {
+		warn("cannot unlink '%s'", argv[0]);
 		return FAIL;
 	}
 

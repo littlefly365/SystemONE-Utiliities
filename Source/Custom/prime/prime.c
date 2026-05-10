@@ -58,14 +58,18 @@ main(int argc, char *argv[])
 				return SUCCESS;
 				break;
 			default:
-				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return FAIL;
+				try_msg();
 				break;
 			}
 		}
 
 	argc -= optind;
 	argv += optind;
+
+	if (argc == 0) {
+		fprintf(stderr, "%s: missing operand\n", PROGNAME);
+		try_msg();
+	}
 
 	for (int i = 0; argv[0][i] != '\0'; i++) {
 		if (!isdigit(argv[0][i]) || atoi(argv[0]) < 0) {

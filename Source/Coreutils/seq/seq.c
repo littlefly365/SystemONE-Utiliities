@@ -57,8 +57,7 @@ main(int argc, char *argv[])
 				return SUCCESS;
 				break;
 			default:
-				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return FAIL;
+				try_msg();
 				break;
 		}
 	}
@@ -68,7 +67,7 @@ main(int argc, char *argv[])
 
 	if (argc == 0) {
 		fprintf(stderr, "%s: missing operand\n", PROGNAME);	
-		return FAIL;
+		try_msg();
 	}
 	
 	else if (argc == 1)

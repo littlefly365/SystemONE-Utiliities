@@ -51,4 +51,8 @@ print_and_space(char *string, int num)
 #define FLAG_OFF 0
 #define FLAG_ON  1
 
+#define try_msg()	\
+	fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);	\
+	return FAIL
+
 #endif

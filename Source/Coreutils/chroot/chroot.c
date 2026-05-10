@@ -36,7 +36,7 @@
 #define PROGNAME "chroot"
 
 static char USAGE[] =
-	"Usage: " PROGNAME " [OPTION]...\n"
+	"Usage: " PROGNAME " [OPTION]... [NEWROOT]\n"
 	"Run COMMAND with root directory set to NEWROOT.\n\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
@@ -55,8 +55,7 @@ main(int argc, char *argv[])
 				return SUCCESS;
 				break;
 			default:
-				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return FAIL;
+				try_msg();
 				break;
 		}
 	}
@@ -66,7 +65,7 @@ main(int argc, char *argv[])
 	
 	if (argc == 0) {
 		fprintf(stderr, "%s: missing operand\n", PROGNAME);
-		return FAIL;
+		try_msg();
 	}
 
 	if (chroot(argv[0]) != 0) {
