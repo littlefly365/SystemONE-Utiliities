@@ -64,18 +64,18 @@ main(int argc, char *argv[])
 				break;
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'n':
 				nflag = 1;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
@@ -94,7 +94,7 @@ main(int argc, char *argv[])
 
 	if (!nflag)
 		putchar('\n');
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }
 
 static int
@@ -127,5 +127,5 @@ interpret_escapes(const char *input, char *output)
 		}
 	}
 	dest = '\0';
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }

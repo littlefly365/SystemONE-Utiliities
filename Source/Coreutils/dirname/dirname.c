@@ -49,29 +49,32 @@ main(int argc, char *argv[])
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
 	
 	if (argc == 1) {
-		fprintf(stderr, "%s: Argument is missing\n", PROGNAME);
-		return EXIT_FAILURE;
+		fprintf(stderr, "%s: missing operand\n", PROGNAME);
+		return FAIL;
 	}
 
 	for (int i = 1; i < argc; i++) {
-		if ((dir = dirname(argv[i])) == NULL)
-			err(1, "dirname");
+		if ((dir = dirname(argv[i])) == NULL) {
+			warn("dirname");
+			return FAIL;
+		}
+
 		puts(dir);
 	}
 
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }

@@ -33,33 +33,19 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "arch"
+#define PROGNAME "chroot"
 
 static char USAGE[] =
 	"Usage: " PROGNAME " [OPTION]...\n"
-	"print system architecture\n\n"
-	"\t-b\t\tprint bit width (32/64)\n"
+	"Run COMMAND with root directory set to NEWROOT.\n\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
-
-DEFINE_FLAG(bflag);
-
 int
 main(int argc, char *argv[])
 {
 	int c;
-	struct utsname u;
-
-	if (uname(&u) != 0) {
-		warn("uname");
-		return FAIL;
-	}
-
-	while ((c = getopt(argc, argv, "bhV")) != -1) {
+	while ((c = getopt(argc, argv, "hV")) != -1) {
 		switch (c) {
-			case 'b':
-				bflag = FLAG_ON;
-				break;
 			case 'h':
 				puts(USAGE);
 				return SUCCESS;
@@ -71,17 +57,22 @@ main(int argc, char *argv[])
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
 				return FAIL;
-				break;	
+				break;
 		}
 	}
 
 	argc -= optind;
 	argv += optind;
+	
+	if (argc == 0) {
+		fprintf(stderr, "%s: missing operand\n", PROGNAME);
+		return FAIL;
+	}
 
-	if (bflag)
-		printf("%zu\n", sizeof(void*) * 8);
-	else
-		puts(u.machine);
+	if (chroot(argv[0]) != 0) {
+		warn("cannot change root directory to '%s'", argv[0]);
+		return FAIL;
+	}
 
 	return SUCCESS;
 }

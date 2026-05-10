@@ -8,6 +8,7 @@ set(COREUTILS
 	arch 
 	basename
 	cat
+	chroot
 	dirname 
 	domainname 
 	echo 
@@ -26,6 +27,7 @@ set(COREUTILS
 	true 
 	tty
 	uname 
+	unlink
 	whoami
 	yes
 )

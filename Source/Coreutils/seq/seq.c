@@ -50,15 +50,15 @@ main(int argc, char *argv[])
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
@@ -67,8 +67,8 @@ main(int argc, char *argv[])
 	argv += optind;
 
 	if (argc == 0) {
-		fprintf(stderr, "%s: Argument is missing\n", PROGNAME);	
-		return EXIT_FAILURE;
+		fprintf(stderr, "%s: missing operand\n", PROGNAME);	
+		return FAIL;
 	}
 	
 	else if (argc == 1)
@@ -84,16 +84,17 @@ main(int argc, char *argv[])
 	
 	if (step == 0) {
 		fprintf(stderr, "%s: invalid Zero increment value: «0»\n", PROGNAME);
-		return EXIT_FAILURE;
+		return FAIL;
 	}
 
 	else if (step > 0)
 		for (int i = num1; i <= num2; i+=step)
 			printf("%d\n", i);
+
 	else if (step < 0) {
 		fprintf(stderr, "%s: increment value must be and postive integer\n", PROGNAME);
-		return EXIT_SUCCESS;
+		return SUCCESS;
 	}	
 
-	return EXIT_SUCCESS;	
+	return SUCCESS;	
 }

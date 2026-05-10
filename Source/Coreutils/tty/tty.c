@@ -54,30 +54,31 @@ main(int argc, char *argv[])
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 's':
 				sflag = FLAG_ON;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
 
 	tty = ttyname(STDIN_FILENO);
+
 	if (!sflag)
 		if (tty)
 			puts(tty);
 		else
 			puts("no a tty");
 	if (tty)
-		return EXIT_SUCCESS;
+		return SUCCESS;
 	else
-		return EXIT_FAILURE;	
+		return FAIL;	
 }

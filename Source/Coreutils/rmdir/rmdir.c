@@ -43,20 +43,20 @@ static char USAGE[] =
 int
 main(int argc, char *argv[])
 {
-	int c, status = EXIT_SUCCESS;
+	int c, status = SUCCESS;
 	while ((c = getopt(argc, argv, "hV")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
@@ -67,7 +67,7 @@ main(int argc, char *argv[])
 	for (int i = 0; i < argc; i++) {
 		if (rmdir(argv[i]) != 0) {
 			warn("failed to remove '%s'", argv[i]);
-			status = EXIT_FAILURE;
+			status = FAIL;
 		}
 	}
 

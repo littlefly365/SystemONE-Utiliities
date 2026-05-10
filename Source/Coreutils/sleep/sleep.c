@@ -53,7 +53,7 @@ main(int argc, char *argv[])
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'm':
 				mflag = FLAG_ON;
@@ -68,26 +68,29 @@ main(int argc, char *argv[])
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'q':
 				vflag = FLAG_OFF;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
 	
 	argc -= optind;
 	argv += optind;
-
-	if (argc == 0||!sflag||!mflag) {
-		fprintf(stderr, "%s: Argument is missing\n", PROGNAME);
-		return EXIT_FAILURE;
-	}
 	
+	if (argc == 0) {
+		fprintf(stderr, "%s: missing operand\n", PROGNAME);
+		return FAIL;
+	}
+
+	if (argc == 1 && !sflag && !mflag)
+		secs = atoi(argv[1]);
+
 	if (vflag) {
 		printf("Sleeping for %d ", secs);
 		if (mflag)
@@ -100,5 +103,6 @@ main(int argc, char *argv[])
 		secs = secs * 60;
 
 	sleep(secs);
-	return EXIT_SUCCESS;
+
+	return SUCCESS;
 }

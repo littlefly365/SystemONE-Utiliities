@@ -53,18 +53,18 @@ main(int argc, char *argv[])
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'r':
 				rflag = FLAG_ON;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
@@ -75,8 +75,11 @@ main(int argc, char *argv[])
 		uid = geteuid();
 
 	struct passwd *pw = getpwuid(uid);
-	if (!pw)
-		err(1, "getpwuid");
+	if (!pw) {
+		warn("getpwuid");
+		return FAIL;
+	}
+
 	puts(pw->pw_name);
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }

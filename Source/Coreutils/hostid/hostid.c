@@ -50,20 +50,20 @@ main(int argc, char *argv[])
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 			}
 		}
 
 	hostid = gethostid() & 0xFFFFFFFF;
 	printf("%08lx\n", hostid);
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }

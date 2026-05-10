@@ -59,18 +59,18 @@ main(int argc, char *argv[])
 				break;
 			case 'h':
 				puts(USAGE);
-				return EXIT_FAILURE;
+				return SUCCESS;
 				break;
 			case 'i':
 				ignore = atoi(optarg);
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 			}
 		}
@@ -86,5 +86,5 @@ main(int argc, char *argv[])
 		nproc = nproc - ignore;	
 
 	printf("%u\n", nproc);
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }

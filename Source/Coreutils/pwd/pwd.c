@@ -54,7 +54,7 @@ main(int argc, char *argv[])
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'L':
 				Lflag = FLAG_ON;
@@ -64,11 +64,11 @@ main(int argc, char *argv[])
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
@@ -78,5 +78,5 @@ main(int argc, char *argv[])
 	else
 		pwd = getcwd(NULL, 0);
 	puts(pwd);
-	return EXIT_SUCCESS;	
+	return SUCCESS;
 }

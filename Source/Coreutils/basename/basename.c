@@ -49,15 +49,15 @@ main(int argc, char *argv[])
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
@@ -66,8 +66,8 @@ main(int argc, char *argv[])
 	argv += optind;
 
 	if (argc == 0) {
-		fprintf(stderr, "%s: Argument is missing\n", PROGNAME);
-		return EXIT_FAILURE;
+		fprintf(stderr, "%s: missing operand\n", PROGNAME);
+		return FAIL;
 	}
 
 	for (int i = 0; i < argc; i++) {
@@ -78,5 +78,5 @@ main(int argc, char *argv[])
 			puts(basename(argv[i]));
 	}
 
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }

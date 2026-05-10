@@ -63,8 +63,11 @@ main(int argc, char *argv[])
 {
 	int c, space = 0;
 	struct utsname u;
-	if (uname(&u) != 0)
-		err(1, "uname");
+	if (uname(&u) != 0) {
+		warn("uname");
+		return FAIL;
+	}
+
 	while ((c = getopt(argc, argv, "ahimnoprsvV")) != -1) {
 		switch (c) {
 			case 'a':
@@ -72,7 +75,7 @@ main(int argc, char *argv[])
 				break;
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'i':
 			case 'p':
@@ -96,11 +99,11 @@ main(int argc, char *argv[])
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
@@ -118,4 +121,6 @@ main(int argc, char *argv[])
 	if (oflag)
 		print_and_space(OS_NAME, space++);
 	putchar('\n');
+
+	return SUCCESS;
 }

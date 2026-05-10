@@ -42,10 +42,11 @@ print_and_space(char *string, int num)
 	fputs(string, stdout);
 }
 
-#define print_version(x)		printf("%s (SystemONE) %s\n", x, PROG_VERSION)
+#define print_version(x)	printf("%s (SystemONE) %s\n", x, PROG_VERSION)
+#define DEFINE_FLAG(name)	int name = 0
 
-
-#define DEFINE_FLAG(name)	bool name = 0
+#define SUCCESS	0
+#define FAIL	1
 
 #define FLAG_OFF 0
 #define FLAG_ON  1

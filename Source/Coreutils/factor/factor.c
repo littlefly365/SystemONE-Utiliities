@@ -49,20 +49,20 @@ main(int argc, char *argv[])
 	int c;
 	unsigned long long num;
 	errno = 0;
-	int status = EXIT_SUCCESS;
+	int status = SUCCESS;
 	while ((c = getopt(argc, argv, "hV")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 			}
 		}
@@ -91,14 +91,14 @@ factor(unsigned long long num)
 
 	if (factored < 0) {
 		fprintf(stderr, "%s: '%llu' is not a valid positive integer\n", PROGNAME, factored);
-		return EXIT_FAILURE;
+		return FAIL;
 	}
 
 	printf("%llu:", factored);
 
 	if (factored == 1 || factored == 0) {
 		putchar('\n');
-		return EXIT_SUCCESS;
+		return SUCCESS;
 	}
 
 	while (factored % 2 == 0) {
@@ -117,5 +117,5 @@ factor(unsigned long long num)
 	}	
 	
 	putchar('\n');
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }

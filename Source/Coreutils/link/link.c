@@ -48,15 +48,15 @@ main(int argc, char *argv[])
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
@@ -64,8 +64,10 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
-	if (link(argv[0], argv[1]) != 0)
-		err(1, "cannot create link '%s' to '%s'", argv[1], argv[0]);
+	if (link(argv[0], argv[1]) != 0) {
+		warn("cannot create link '%s' to '%s'", argv[1], argv[0]);
+		return FAIL;
+	}
 
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }

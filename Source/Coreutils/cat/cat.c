@@ -46,20 +46,20 @@ main(int argc, char *argv[])
 	int c, fd;
 	char buf[4096];
 	ssize_t size;
-	int status = EXIT_SUCCESS;
+	int status = SUCCESS;
 	while ((c = getopt(argc, argv, "hV")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
@@ -71,7 +71,7 @@ main(int argc, char *argv[])
 		fd = open(argv[i], O_RDONLY);
 		if (fd < 0) {
 			warn(argv[i]);
-			status = EXIT_FAILURE;
+			status = FAIL;
 		}
 		while ((size = read(fd, buf, sizeof(buf))) > 0)
 			write(STDOUT_FILENO, buf, size);

@@ -49,17 +49,17 @@ main(int argc, char *argv[])
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 			default:
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
 
-	return EXIT_FAILURE;
+	return FAIL;
 }

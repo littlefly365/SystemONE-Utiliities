@@ -50,15 +50,15 @@ main(int argc, char *argv[])
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			}
 		}
@@ -67,14 +67,20 @@ main(int argc, char *argv[])
 	argv += optind;
 
 	if (argc <= 0) { 
-		if (getdomainname(domainname, sizeof(domainname)))
-			err(1, "getdomainname");
+		if (getdomainname(domainname, sizeof(domainname))) {
+			warn("getdomainname");
+			return FAIL;
+		}
+
 		puts(domainname);
 	} else {
-		if (setdomainname(*argv, strlen(*argv)))
-			err(1, "setdomainname");
-		return EXIT_SUCCESS;
+		if (setdomainname(*argv, strlen(*argv))) {
+			warn("setdomainname");
+			return FAIL;
+		}
+
+		return SUCCESS;
 	}
 
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }

@@ -44,21 +44,21 @@ int
 main(int argc, char *argv[])
 {
 	int c;
-	int status = EXIT_SUCCESS;
+	int status = SUCCESS;
 	char buf[PATH_MAX];
 	while ((c = getopt(argc, argv, "hV")) != -1) {
 		switch (c) {
 			case 'h':
 				puts(USAGE);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 		}
 	}
@@ -68,7 +68,7 @@ main(int argc, char *argv[])
 
 	for (int i = 0; i < argc; i++) {
 		if (readlink(argv[i], buf, sizeof(buf)) == -1)
-			status = EXIT_FAILURE;
+			status = FAIL;
 		else
 			puts(buf);
 	}

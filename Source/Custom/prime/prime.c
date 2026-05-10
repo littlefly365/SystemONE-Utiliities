@@ -51,15 +51,15 @@ main(int argc, char *argv[])
 		switch (c) {
 			case 'h':
 				puts(USAGE);	
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			case 'V':
 				print_version(PROGNAME);
-				return EXIT_SUCCESS;
+				return SUCCESS;
 				break;
 			default:
 				fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);
-				return EXIT_FAILURE;
+				return FAIL;
 				break;
 			}
 		}
@@ -70,7 +70,7 @@ main(int argc, char *argv[])
 	for (int i = 0; argv[0][i] != '\0'; i++) {
 		if (!isdigit(argv[0][i]) || atoi(argv[0]) < 0) {
 			fprintf(stderr, "%s: '%s' is not a valid positive number\n", PROGNAME, argv[0]);
-			return EXIT_FAILURE;
+			return FAIL;
 		}
 	}
 
@@ -78,7 +78,7 @@ main(int argc, char *argv[])
 
 	if (prime <= 1 || (prime % 2 == 0 && prime != 2)) {
 		printf("%s is not prime\n", argv[0]);
-		return EXIT_SUCCESS;
+		return SUCCESS;
 	}
 	
 	while (!not_is_prime && num <= prime / num) {
@@ -92,5 +92,5 @@ main(int argc, char *argv[])
 	else
 		printf("%d is not prime\n", prime);
 
-	return EXIT_SUCCESS;
+	return SUCCESS;
 }
