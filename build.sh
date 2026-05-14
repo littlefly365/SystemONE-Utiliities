@@ -48,6 +48,7 @@ build()
 	check_command "cmake"
 	cmake ..
 	check_command "make"
+
 	if check_command "nproc"; then
 		make -j$(nproc)
 	else
@@ -60,16 +61,11 @@ clean()
 	rm -rf "$BUILD_DIR"
 }
 
-main()
-{
-	case "$1" in
-		clean)
-			clean
-		;;
-		*)
-			build
-		;;
-	esac
-}
-
-main "$1"
+case "$1" in
+	clean)
+		clean
+	;;
+	*)
+		build
+	;;
+esac

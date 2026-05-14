@@ -33,22 +33,20 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "whoami"
-
 static char USAGE[] =
-	"Usage: " PROGNAME " [OPTION]...\n"
+	"Usage: %s [OPTION]...\n"
 	"Display the username of the current user.\n\n"
 	"\t-r\t\tuse real UID instead of effective\n"
 	"\t-h\t\tshow this help and exit\n"
 	"\t-V\t\tshow version information and exit";
-
-DEFINE_FLAG(rflag);
 
 int
 main(int argc, char *argv[])
 {
 	int c;
 	uid_t uid;
+	Options opt = {0};
+	setprogname(argv[0]);
 	while ((c = getopt(argc, argv, "hrV")) != -1) {
 		switch (c) {
 			case 'h':
@@ -56,14 +54,15 @@ main(int argc, char *argv[])
 				return SUCCESS;
 				break;
 			case 'r':
-				rflag = FLAG_ON;
+				opt.r = 1;
 				break;
 			case 'V':
-				print_version(PROGNAME);
+				print_version();
 				return SUCCESS;
 				break;
 			default:
-				try_msg();
+				fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+				return FAIL;
 				break;
 		}
 	}
@@ -75,9 +74,7 @@ main(int argc, char *argv[])
 
 	struct passwd *pw = getpwuid(uid);
 	if (!pw) {
-		warn("getpwuid");
-		return FAIL;
-	}
+		err(FAIL, "getpwuid");
 
 	puts(pw->pw_name);
 	return SUCCESS;

@@ -34,6 +34,7 @@ set(COREUTILS
 
 set(CUSTOM
 	prime
+	ldd
 	SystemONE-version	
 )
 

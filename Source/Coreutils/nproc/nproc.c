@@ -33,48 +33,36 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "nproc"
-
-static char USAGE[] =
-	"Usage: " PROGNAME " [OPTION]...\n"
-	"Print  the number of processing units available to the current process,\n"
-	"which may be less than the number of online processors.\n\n"
-	"\t-a\t\tprint the number of installed processors\n"
-	"\t-i\t\tif possible, exclude N processing units. The result is guaranteed to be at least 1.\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit";
-
-
-DEFINE_FLAG(aflag);
+static void usage(void);
 
 int
 main(int argc, char *argv[])
 {
 	int c, ignore = 0;
 	unsigned long nproc;
+	Options opt = {0};
 	while ((c = getopt(argc, argv, "ahi:v")) != -1) {
 		switch (c) {
 			case 'a':
-				aflag = FLAG_ON;				
+				opt.a = 1;
 				break;
 			case 'h':
-				puts(USAGE);
-				return SUCCESS;
+				usage();
 				break;
 			case 'i':
 				ignore = atoi(optarg);
 				break;
 			case 'V':
-				print_version(PROGNAME);
-				return SUCCESS;
+				print_version();
 				break;
 			default:
-				try_msg();
+				fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+				return FAIL;
 				break;
 			}
 		}
 	
-	if (aflag)
+	if (opt.a)
 		nproc = sysconf(_SC_NPROCESSORS_CONF);
 	else
 		nproc = sysconf(_SC_NPROCESSORS_ONLN);
@@ -86,4 +74,18 @@ main(int argc, char *argv[])
 
 	printf("%u\n", nproc);
 	return SUCCESS;
+}
+
+static void
+usage(void)
+{
+	printf("Usage: %s [OPTION]...\n"
+	"Print  the number of processing units available to the current process,\n"
+	"which may be less than the number of online processors.\n\n"
+	"\t-a\t\tprint the number of installed processors\n"
+	"\t-i\t\tif possible, exclude N processing units. The result is guaranteed to be at least 1.\n"
+	"\t-h\t\tshow this help and exit\n"
+	"\t-V\t\tshow version information and exit\n", 
+	__progname);
+	exit(SUCCESS);
 }

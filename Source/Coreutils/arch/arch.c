@@ -33,43 +33,39 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "arch"
+static struct option longopts[] = {
+	{"bits", no_argument, 0, 'b'},
+        {"help", no_argument, 0, HOPT},
+        {"version", no_argument, 0, VOPT},
+        {0, 0, 0, 0}
+};
 
-static char USAGE[] =
-	"Usage: " PROGNAME " [OPTION]...\n"
-	"print system architecture\n\n"
-	"\t-b\t\tprint bit width (32/64)\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit";
-
-DEFINE_FLAG(bflag);
+static void usage(void);
 
 int
 main(int argc, char *argv[])
 {
 	int c;
 	struct utsname u;
+	Options opt = {0};
+	setprogname(argv[0]);
+	if (uname(&u) != 0)
+		err(FAIL, "uname");
 
-	if (uname(&u) != 0) {
-		warn("uname");
-		return FAIL;
-	}
-
-	while ((c = getopt(argc, argv, "bhV")) != -1) {
+	while ((c = getopt_long(argc, argv, "b", longopts, NULL)) != -1) {
 		switch (c) {
 			case 'b':
-				bflag = FLAG_ON;
+				opt.b = 1;
 				break;
-			case 'h':
-				puts(USAGE);
-				return SUCCESS;
+			case HOPT:
+				usage();
 				break;
-			case 'V':
-				print_version(PROGNAME);
-				return SUCCESS;
+			case VOPT:
+				print_version();
 				break;
 			default:
-				try_msg();
+				fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+				return SUCCESS;
 				break;	
 		}
 	}
@@ -77,10 +73,22 @@ main(int argc, char *argv[])
 	argc -= optind;
 	argv += optind;
 
-	if (bflag)
+	if (opt.b)
 		printf("%zu\n", sizeof(void*) * 8);
 	else
 		puts(u.machine);
 
 	return SUCCESS;
+}
+
+static void
+usage(void)
+{
+	printf("Usage: %s [OPTION]...\n"
+	"print system architecture\n\n"
+	"  -b, --bits\tprint bit width (32/64)\n"
+	"  --help\tshow this help and exit\n"
+	"  --version\tshow version information and exit\n",
+	__progname);
+	exit(SUCCESS);
 }

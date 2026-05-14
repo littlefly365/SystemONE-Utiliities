@@ -33,29 +33,27 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "rmdir"
+static struct option longopts[] = {
+	{"help", no_argument, 0, HOPT},
+	{"version", no_argument, 0, VOPT}	,
+	{0, 0, 0, 0}
+};
 
-static char USAGE[] =
-	"Usage: " PROGNAME " [OPTION]...\n"
-	"Remove the DIRECTORY(ies), if they are empty.\n\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit";
 int
 main(int argc, char *argv[])
 {
 	int c, status = SUCCESS;
-	while ((c = getopt(argc, argv, "hV")) != -1) {
+	while ((c = getopt_long(argc, argv, "", longopts, NULL)) != -1) {
 		switch (c) {
-			case 'h':
-				puts(USAGE);
-				return SUCCESS;
+			case HOPT:
+				usage();
 				break;
-			case 'V':
-				print_version(PROGNAME);
-				return SUCCESS;
+			case VOPT:
+				print_version();
 				break;
 			default:
-				try_msg();
+				fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+				return FAIL;
 				break;
 		}
 	}
@@ -64,8 +62,9 @@ main(int argc, char *argv[])
 	argv += optind;
 
 	if (argc == 0) {
-		fprintf(stderr, "%s: missing operand\n", PROGNAME);
-		try_msg();
+		fprintf(stderr, "%s: missing operand\n", __progname);
+		fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+		return FAIL;
 	}
 
 	for (int i = 0; i < argc; i++) {
@@ -76,4 +75,15 @@ main(int argc, char *argv[])
 	}
 
 	return status;
+}
+
+static void
+usage(void)
+{
+	printf("Usage: %s [OPTION]...\n"
+	"Remove the DIRECTORY(ies), if they are empty.\n\n"
+	"\t-h\t\tshow this help and exit\n"
+	"\t-V\t\tshow version information and exit\n",
+	__progname);
+	exit(SUCCESS);
 }

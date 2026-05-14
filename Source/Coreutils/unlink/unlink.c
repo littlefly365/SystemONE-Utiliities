@@ -33,29 +33,30 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "unlink"
+static struct option longopts[] = {
+	{"help", no_argument, 0, HOPT},
+	{"version", no_argument, 0, VOPT},
+	{0, 0, 0, 0}
+};
 
-static char USAGE[] =
-	"Usage: " PROGNAME " [OPTION]...\n"
-	"Call the unlink function to remove the specified FILE.\n\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit";
+static void usage(void);
+
 int
 main(int argc, char *argv[])
 {
 	int c;
-	while ((c = getopt(argc, argv, "hV")) != -1) {
+	setprogname(argv[0]);
+	while ((c = getopt(argc, argv, "", longopts, NULL)) != -1) {
 		switch (c) {
-			case 'h':
-				puts(USAGE);
-				return SUCCESS;
+			case HOPT:
+				usage();
 				break;
-			case 'V':
-				print_version(PROGNAME);
-				return SUCCESS;
+			case VOPT:
+				print_version();
 				break;
 			default:
-				try_msg();
+				fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+				return FAIL;
 				break;
 		}
 	}
@@ -65,18 +66,26 @@ main(int argc, char *argv[])
 
 	if (argc == 0) {
 		fprintf(stderr, "%s: missing operand\n", PROGNAME);
-		try_msg();
-	}
-
-	if (argc > 1) {
+	if (argc > 1) 
 		fprintf(stderr, "%s: extra operand '%s'\n", PROGNAME, argv[2]);
-		try_msg();
-	}
-
-	if (unlink(argv[0]) != 0) {
-		warn("cannot unlink '%s'", argv[0]);
+	if (argc == 0 || argc > 1) {
+		fprintf(stderr, "Try '%s --help' for more information\n", __progname);
 		return FAIL;
 	}
 
-	return FAIL;
+	if (unlink(argv[0]) != 0)
+		err(FAIL, "cannot unlink '%s'", argv[0]);
+
+	return SUCCESS;
+}
+
+static void
+usage(void)
+{
+	printf("Usage: %s [OPTION]... [FILE]\n"
+	"Call the unlink function to remove the specified FILE.\n\n"
+	"\t-h\t\tshow this help and exit\n"
+	"\t-V\t\tshow version information and exit",
+	__progname);
+	exit(SUCCESS);
 }

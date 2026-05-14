@@ -62,11 +62,10 @@ int
 main(int argc, char *argv[])
 {
 	int c, space = 0;
+	Options opts = {0};
 	struct utsname u;
-	if (uname(&u) != 0) {
-		warn("uname");
-		return FAIL;
-	}
+	if (uname(&u) != 0)
+		err(FAIL, "uname");
 
 	while ((c = getopt(argc, argv, "ahimnoprsvV")) != -1) {
 		switch (c) {
@@ -107,18 +106,41 @@ main(int argc, char *argv[])
 		}
 	}
 
-	if (sflag || argc == 1)
-		print_and_space(u.sysname, space++);
-	if (nflag)
-		print_and_space(u.nodename, space++);
-	if (rflag)
-		print_and_space(u.release, space++);
-	if (vflag)
-		print_and_space(u.version, space++);
-	if (mflag)
-		print_and_space(u.machine, space++);
-	if (oflag)
-		print_and_space(OS_NAME, space++);
+	if (sflag || argc == 1) {
+		fputs(u.sysname, stdout);
+		space++;
+	}
+
+	if (nflag) {
+		if (space)
+			putchar(' ');
+		fputs(u.nodename, stdout);
+	}
+
+	if (rflag) {
+		if (space)
+			putchar(' ');
+		fputs(u.release, stdout);
+	}
+
+	if (vflag) {
+		if (space)
+			putchar(' ');
+		fputs(u.version, stdout);
+	}
+
+	if (mflag) {
+		if (space)
+			putchar(' ');
+		fputs(u.machine, stdout);
+	}
+
+	if (oflag) {
+		if (space)
+			putchar(' ');
+		fputs(OS_NAME, stdout);
+	}
+
 	putchar('\n');
 
 	return SUCCESS;

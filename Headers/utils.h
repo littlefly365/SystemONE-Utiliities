@@ -32,8 +32,10 @@
 #ifndef _UTILS_H
 #define _UTILS_H	1
 
+#define _GNU_SOURCE
 #include <sys/utsname.h>
 #include <sys/param.h>
+#include <sys/wait.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,5 +48,9 @@
 #include <limits.h>
 #include <pwd.h>
 #include <fcntl.h>
+#include <getopt.h>
+
+#define SUCCESS 0
+#define FAIL    1
 
 #endif

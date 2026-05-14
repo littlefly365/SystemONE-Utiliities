@@ -32,27 +32,46 @@
 #ifndef _AUX_H
 #define _AUX_H	1
 
-#include <stdio.h>
+#include "utils.h"
+#include "info.h"
 
-static void
-print_and_space(char *string, int num)
+static char *__progname;
+
+#define HOPT	1234
+#define VOPT	2345
+
+static int
+print_version()
 {
-	if (num)
-		putchar(' ');
-	fputs(string, stdout);
+	printf("%s (SystemONE) %s\n", __progname, PROG_VERSION);
+	printf("Copyright (C) 2026 SystemONE Foundation.\n");
+	printf("This project is under the BSD-3-Clause license.\n");
+	printf("This is free software: you are free to change and redistribute it.\n");
+	printf("There is NO WARRANTY, to the extent permitted by law.\n");
+	printf("\nWritten by %s.\n", AUTHOR);
+	if (strcmp(__progname, "false") == 0)
+		exit(FAIL);
+	else
+		exit(SUCCESS);
 }
 
-#define print_version(x)	printf("%s (SystemONE) %s\n", x, PROG_VERSION)
-#define DEFINE_FLAG(name)	int name = 0
+static void
+setprogname(char *progname)
+{
+	__progname = basename(progname);
+}
 
-#define SUCCESS	0
-#define FAIL	1
-
-#define FLAG_OFF 0
-#define FLAG_ON  1
-
-#define try_msg()	\
-	fprintf(stderr, "Try '%s -h' for more information\n", PROGNAME);	\
-	return FAIL
+typedef struct {
+	int a;
+	int b;
+	int i;
+	int L;
+	int m;
+	int n;
+	int o;
+	int r;
+	int s;
+	int v;
+} Options;
 
 #endif

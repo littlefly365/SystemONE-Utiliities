@@ -33,27 +33,25 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "false"
+static struct option longopts[] = {
+	{"help", no_argument, 0, HOPT},
+	{"version", no_argument, 0, VOPT},
+	{0, 0, 0, 0}
+};
 
-static char USAGE[] =
-	"Usage: " PROGNAME "\n"
-	"or: " PROGNAME " [OPTION]\n"
-	"Exit with a status code indicating failure.\n\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit";
+static void usage();
+
 int
 main(int argc, char *argv[])
 {
 	int c;
-	while ((c = getopt(argc, argv, "hV")) != -1) {
+	while ((c = getopt_long(argc, argv, "", longopts, NULL)) != -1) {
 		switch (c) {
-			case 'h':
-				puts(USAGE);
-				return FAIL;
+			case HOPT:
+				usage();
 				break;
-			case 'V':
-				print_version(PROGNAME);
-				return FAIL;
+			case VOPT:
+				print_version();
 				break;
 			default:
 				return FAIL;
@@ -62,4 +60,15 @@ main(int argc, char *argv[])
 	}
 
 	return FAIL;
+}
+
+static void
+usage(void)
+{
+	printf("Usage: %s [OPTION]...\n"
+	"Exit with a status code indicating failure.\n\n"
+	"\t-h\t\tshow this help and exit\n"
+	"\t-V\t\tshow version information and exit",
+	__progname);
+	exit(FAIL);
 }

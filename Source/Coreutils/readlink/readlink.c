@@ -33,13 +33,15 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "readlink"
+static struct option longopts[] =
+{
+	{"help", no_argument, 0, HOPT},
+	{"version", no_argument, 0, VOPT},
+	{0, 0, 0, 0}
+};
 
-static char USAGE[] =
-	"Usage: " PROGNAME " [PATH] [OPTION]...\n"
-	"Print value of a symbolic link or canonical file name.\n\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit";
+static void usage(void);
+
 int
 main(int argc, char *argv[])
 {
@@ -48,16 +50,15 @@ main(int argc, char *argv[])
 	char buf[PATH_MAX];
 	while ((c = getopt(argc, argv, "hV")) != -1) {
 		switch (c) {
-			case 'h':
-				puts(USAGE);
-				return SUCCESS;
+			case HOPT:
+				usage();
 				break;
-			case 'V':
-				print_version(PROGNAME);
-				return SUCCESS;
+			case VOPT:
+				print_version();
 				break;
 			default:
-				try_msg();
+				fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+				return FAIL;
 				break;
 		}
 	}
@@ -73,4 +74,15 @@ main(int argc, char *argv[])
 	}
 
 	return status;
+}
+
+static void
+usage(void)
+{
+	printf("Usage: %s [PATH] [OPTION]...\n"
+	"Print value of a symbolic link or canonical file name.\n\n"
+	"  --help\tshow this help and exit\n"
+	"  --version\tshow version information and exit\n", 
+	__progname);
+	exit(FAIL);
 }

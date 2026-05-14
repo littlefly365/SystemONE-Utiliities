@@ -33,37 +33,35 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "echo"
+static struct option longopts[] = {
+	{"no-newline", no_argument, 0, 'n'},
+        {"help", no_argument, 0, HOPT},
+        {"version", no_argument, 0, VOPT},
+        {0, 0, 0, 0}
+};
 
-static char USAGE[] =
-	"Usage: " PROGNAME " [OPTION]... [STRING]...\n"
-	"Echo the STRING(s) to standard output.\n\n"
-	"\t-n\t\tdo not print newline\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit";
-
-DEFINE_FLAG(nflag);
+static void usage(void);
 
 int
 main(int argc, char *argv[])
 {
-	int c, printed = 0;
+	int c;
+	Options opt = {0};
 	char buf[1024];
-	while ((c = getopt(argc, argv, "hnV")) != -1) {
+	while ((c = getopt_long(argc, argv, "n", longopts, NULL)) != -1) {
 		switch (c) {
-			case 'h':
-				puts(USAGE);
-				return SUCCESS;
+			case HOPT:
+				usage();
 				break;
 			case 'n':
-				nflag = 1;
+				opt.n = 1;
 				break;
-			case 'V':
-				print_version(PROGNAME);
-				return SUCCESS;
+			case VOPT:
+				print_version();
 				break;
 			default:
-				try_msg();
+				fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+				return FAIL;
 				break;
 		}
 	}
@@ -72,10 +70,24 @@ main(int argc, char *argv[])
 	argv += optind;
 
 	for (int i = 0; i < argc; i++) {
-		print_and_space(argv[i], printed++);
+		if (i)
+			putchar(' ');
+		fputs(buf, stdout);
 	}
 
-	if (!nflag)
+	if (!opt.n)
 		putchar('\n');
 	return SUCCESS;
+}
+
+static void
+usage(void)
+{
+        printf("Usage: %s [OPTION]... [STRING]...\n"
+        "Echo the STRING(s) to standard output.\n\n"
+        "  -n, --no-newline\tdo not print newline\n"
+        "  --help\tshow this help and exit\n"
+	"  --version\tshow version information and exit\n",
+	__progname);
+	exit(SUCCESS);
 }

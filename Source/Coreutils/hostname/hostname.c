@@ -33,31 +33,31 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "hostname"
+static struct option longopts[] = {
+	{"help", no_argument, 0, HOPT},
+	{"version", no_argument, 0, VOPT},
+	{0, 0, 0, 0}
+};
 
-static char USAGE[] =
-	"Usage: " PROGNAME " [NAME] [OPTION]...\n"
-	"Show or set the system's host name.\n\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit";
-	
+static void usage(void);
+
 int
 main(int argc, char *argv[])
 {
 	int c;
 	char hostname[MAXHOSTNAMELEN];
-	while ((c = getopt(argc, argv, "hV")) != -1) {
+	setprogname(argv[0]);
+	while ((c = getopt_long(argc, argv, "", longopts, NULL)) != -1) {
 		switch (c) {
-			case 'h':
-				puts(USAGE);
-				return SUCCESS;
+			case HOPT:
+				usage();
 				break;
-			case 'V':
-				print_version(PROGNAME);
-				return SUCCESS;
+			case VOPT:
+				print_version();
 				break;
 			default:
-				try_msg();
+				fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+				return FAIL;
 				break;
 			}
 		}
@@ -66,19 +66,28 @@ main(int argc, char *argv[])
 	argv += optind;
 
 	if (*argv) { 
-		if (sethostname(*argv, strlen(*argv))) {
-			warn("sethostname");
-			return FAIL;
-		}
+		if (sethostname(*argv, strlen(*argv)))
+			err(FAIL, "sethostname");
+
 		return SUCCESS;
 	} else {
-		if (gethostname(hostname, sizeof(hostname))) {
-			warn("gethostname");
-			return FAIL;
-		}
+		if (gethostname(hostname, sizeof(hostname)))
+			err(FAIL, "gethostname");
 
 		puts(hostname);
 	}
 
 	return SUCCESS;
+}
+
+static void
+usage(void)
+{
+	printf("Usage: %s [OPTION]... [NAME]\n"
+	"Show or set the system's host name.\n\n"
+	"\t-h\t\tshow this help and exit\n"
+	"\t-V\t\tshow version information and exit", 
+	__progname);
+	exit(SUCCESS);
+
 }

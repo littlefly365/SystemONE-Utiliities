@@ -33,31 +33,31 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "hostid"
+static struct option longopts[] = {
+	{"help", no_argument, 0, HOPT},
+	{"version", no_argument, 0, VOPT},
+	{0, 0, 0, 0}
+};
 
-static char USAGE[] =
-	"Usage: " PROGNAME " [OPTION]\n"
-	"Print the numeric identifier (in hexadecimal) for the current host.\n\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit";
+static void usage(void);
 
 int
 main(int argc, char *argv[])
 {
 	int c;
 	unsigned long hostid;
-	while ((c = getopt(argc, argv, "hV")) != -1) {
+	setprogname(argv[0]);
+	while ((c = getopt_long(argc, argv, "", longopts, NULL)) != -1) {
 		switch (c) {
-			case 'h':
-				puts(USAGE);
-				return SUCCESS;
+			case HOPT:
+				usage();
 				break;
-			case 'V':
-				print_version(PROGNAME);
-				return SUCCESS;
+			case VOPT:
+				print_version();
 				break;
 			default:
-				try_msg();
+				fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+				return FAIL;
 				break;
 			}
 		}
@@ -65,4 +65,15 @@ main(int argc, char *argv[])
 	hostid = gethostid() & 0xFFFFFFFF;
 	printf("%08lx\n", hostid);
 	return SUCCESS;
+}
+
+static void
+usage(void)
+{
+	printf("Usage: %s [OPTION]\n"
+	"Print the numeric identifier (in hexadecimal) for the current host.\n\n"
+	"\t-h\t\tshow this help and exit\n"
+	"\t-V\t\tshow version information and exit",
+	__progname);
+	exit(SUCCESS);
 }

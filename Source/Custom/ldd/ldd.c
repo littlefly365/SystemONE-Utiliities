@@ -33,7 +33,9 @@
 #include "aux.h"
 #include "info.h"
 
-static struct option longopts[] ={
+extern char **environ;
+
+struct option longopts[] = {
 	{"help", no_argument, 0, HOPT},
 	{"version", no_argument, 0, VOPT},
 	{0, 0, 0, 0}
@@ -44,48 +46,76 @@ static void usage(void);
 int
 main(int argc, char *argv[])
 {
-	int c;
-	char *pwd;
-	Options opt = {0};
+	int c, print_name = 0;
+	char buf[512];
 	setprogname(argv[0]);
-	while ((c = getopt_long(argc, argv, "LP", longopts, NULL)) != -1) {
+	while ((c = getopt_long(argc, argv, "", longopts, NULL)) != -1) {
 		switch (c) {
-			case HOPT:
-				usage();
-				break;
-			case 'L':
-				opt.L = 1;
-				break;
-			case 'P':
-				opt.L = 0;
-				break;
-			case VOPT:
-				print_version();
-				break;
-			default:
-				fprintf(stderr, "Try '%s --help' for more information", __progname);
-				return FAIL;
-				break;
+				case HOPT:
+					usage();
+					break;
+				case VOPT:
+					print_version();
+					break;
+				default:
+					fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+					return FAIL;
+					break;
+			}
+		}
+
+	argc -= optind;
+	argv += optind;
+
+	if (argc == 0) {
+		fprintf(stderr, "%s: missing file arguments\n", __progname);
+		fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+		return FAIL;
+	}
+	
+	if (argc >= 2)
+		print_name=1;
+
+	int status = SUCCESS;
+	pid_t pid;
+
+	setenv("LD_TRACE_LOADED_OBJECTS", "1", 1);
+
+	for (int i = 0; i < argc; i++) {
+		if (print_name)
+			printf("%s:\n", argv[i]);
+		if (strchr(argv[i], '/') == NULL) {
+			snprintf(buf, sizeof(buf), "./%s", argv[i]);
+		} else {
+			strlcpy(buf, argv[i], sizeof(buf));
+		}
+
+		if (access(buf, F_OK) != 0) {
+			fprintf(stderr, "%s: %s: No such file or directory\n", __progname, buf);
+			status=FAIL;
+		} else {
+			pid = fork();
+			char *args[] = { argv[i], NULL};
+			if (pid == -1)
+				err(FAIL, "fork");
+			if (pid == 0) {
+				execvpe(buf, args, environ);
+				_exit(FAIL);
+			}
+			waitpid(pid, NULL, 0);
 		}
 	}
 
-	if (opt.L)
-		pwd = getenv("PWD");
-	else
-		pwd = getcwd(NULL, 0);
-	puts(pwd);
-	return SUCCESS;
+	return status;
 }
 
 static void
 usage(void)
 {
-	printf("Usage: %s [OPTION]...\n"
-	"Print the full filename of the current working directory.\n\n"
-	"\t-L\t\tuse PWD from environment, even if it contains symlinks\n"
-	"\t-P\t\tresolve all symlinks (default)\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit",
-	__progname);
-	exit(FAIL);
+	printf("Usage: %s [OPTION]... [FILE]...\n"
+		"print shared object dependencies\n\n"
+		"  --help    show this help and exit\n"
+		"  --version show version information and exit\n",
+	 __progname);
+	exit(SUCCESS);
 }

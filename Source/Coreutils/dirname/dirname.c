@@ -33,47 +33,60 @@
 #include "aux.h"
 #include "info.h"
 
-#define PROGNAME "dirname"
+static struct option longopts[] = {
+        {"help", no_argument, 0, HOPT},
+        {"version", no_argument, 0, VOPT},
+        {0, 0, 0, 0}
+};
 
-static char USAGE[] =
-	"Usage: " PROGNAME " [PATH] [OPTION]...\n"
-	"Print the directory portion of a pathname.\n\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit";
+static void usage();
+
 int
 main(int argc, char *argv[])
 {
 	int c;
 	char *dir;
-	while ((c = getopt(argc, argv, "hV")) != -1) {
+	setprogname(argv[0]);
+	while ((c = getopt_long(argc, argv, "", longopts, NULL)) != -1) {
 		switch (c) {
-			case 'h':
-				puts(USAGE);
-				return SUCCESS;
+			case HOPT:
+				usage();
 				break;
-			case 'V':
-				print_version(PROGNAME);
-				return SUCCESS;
+			case VOPT:
+				print_version();
 				break;
 			default:
-				try_msg();
+				fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+				return FAIL;
 				break;
 		}
 	}
 	
 	if (argc == 1) {
-		fprintf(stderr, "%s: missing operand\n", PROGNAME);
-		try_msg();
+		fprintf(stderr, "%s: missing operand\n"
+			"Try '%s --help' for more information\n",
+			__progname, __progname);
+		return FAIL;
+
 	}
 
 	for (int i = 1; i < argc; i++) {
-		if ((dir = dirname(argv[i])) == NULL) {
-			warn("dirname");
-			return FAIL;
-		}
+		if ((dir = dirname(argv[i])) == NULL)
+			err(FAIL, "dirname");
 
 		puts(dir);
 	}
 
 	return SUCCESS;
+}
+
+static void
+usage()
+{
+	printf("Usage: %s [OPTION]... [NAME]...\n"
+	"Print NAME with any leading directory components removed.\n\n"
+	"  --help\tshow this help and exit\n"
+	"  --version\tshow version information and exit\n",
+	__progname);
+	exit(SUCCESS);
 }

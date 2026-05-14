@@ -49,7 +49,7 @@ DEFINE_FLAG(nflag);
 int
 main(int argc, char *argv[])
 {
-	int c, secs, printed = 0;
+	int c, secs;
 	int max = 1;
 
 	while ((c = getopt(argc, argv, "hi:n:V")) != -1) {
@@ -80,8 +80,12 @@ main(int argc, char *argv[])
 	argv += optind;
 
 	for (int i = max; i > 0 ; i--) {
-		for (int j = 0; j < argc; j++)
-			print_and_space(argv[j], printed++);
+		for (int j = 0; j < argc; j++) {
+			if (j)
+				putchar(' ');
+			fputs(argv[j], stdout);
+		}
+
 		if (argc == 0)
 			fputs("y", stdout);
 		if (!nflag)
