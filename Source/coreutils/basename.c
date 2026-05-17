@@ -101,5 +101,5 @@ usage(void)
 	printf("%s      -z%s\n	 end each output line with NUL, not newline\n", BOLD, REG);
 	HELP_USAGE_ABOUT();
 	VERSION_USAGE_ABOUT();
-        exit(EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }
