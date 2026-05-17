@@ -47,10 +47,10 @@ main(int argc, char *argv[])
 Noreturn void
 usage(void)
 {
-        printf("Usage: %s [ignored command line arguments]\n"
+	printf("Usage: %s [ignored command line arguments]\n"
 	"  or:  %s OPTION\n"
-        "Exit with a status code indicating failure.\n\n", __progname, __progname);
+	"Exit with a status code indicating failure.\n\n", __progname, __progname);
 	HELP_USAGE_ABOUT();
 	VERSION_USAGE_ABOUT();
-        exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
