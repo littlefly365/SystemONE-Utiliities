@@ -45,7 +45,7 @@ main(int argc, char *argv[])
 	OptionVals flag = {0};
 	char *path, *suffix = NULL;
 	setprogname(argv[0]);
-        ArgsParser(argc, argv, "asz", "s", &flag);
+	ArgsParser(argc, argv, "asz", "s", &flag);
 
 	argc -= optindex;
 	argv += optindex;
