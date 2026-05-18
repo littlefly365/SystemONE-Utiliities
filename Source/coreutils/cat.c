@@ -31,36 +31,40 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <err.h>
 #include <system.h>
 #include <ArgParser.h>
 
 int
 main(int argc, char *argv[])
 {
-	int c, fd;
+	int fd, i;
 	int status = EXIT_SUCCESS;
 	char buf[4096];
 	ssize_t size;
 	OptionVals flag = {0};
 	setprogname(argv[0]);
-	ArgsParser(argc, argv, "", "", &flag);	
+	ArgsParser(argc, argv, "u", "", &flag);	
+	Next(argc, argv);	
 	
-	argc -= optindex;
-	argv += optindex;
-
-	for (int i = 0; i < argc; ++i) {
-		fd = open(argv[i], O_RDONLY);
+	do {
+		if (argc == 0 || ((strcmp(argv[i], "-")) == 0))
+			fd = STDIN_FILENO;
+		else
+			fd = open(argv[i], O_RDONLY);
 		if (fd < 0) {
-			warn(argv[i]);
+			warn("%s", argv[i]);
 			status = EXIT_FAILURE;
 		}
 		while ((size = read(fd, buf, sizeof(buf))) > 0)
 			write(STDOUT_FILENO, buf, size);
-		close(fd);
-	}
+		if (fd != STDIN_FILENO)
+			close(fd);
+	} while (++i < argc);
 
 	return status;
 }
@@ -68,8 +72,11 @@ main(int argc, char *argv[])
 Noreturn void
 usage(void)
 {
-	printf("Usage: %s [OPTION]... [FILE]...\n"
-	"Concatenate FILE(s) to standard output.\n\n", __progname);
+	printf("Usage: %s [FILE]...\n"
+	"Description: Concatenate FILE(s) to standard output.\n"
+	"\nOptions:\n", __progname);
+	print_opt("u", "(ignored)");
+	printf("\nGeneral:\n");
 	HELP_USAGE_ABOUT();
 	VERSION_USAGE_ABOUT();
 	exit(EXIT_SUCCESS);

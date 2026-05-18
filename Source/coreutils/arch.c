@@ -35,27 +35,34 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <err.h>
-
 #include <system.h>
 #include <ArgParser.h>
 
 int
 main(int argc, char *argv[])
 {
-	struct utsname u;
+	struct utsname uts;
 	OptionVals flag = {0};
 	setprogname(argv[0]);
-	TRY(uname(&u), "uname");
-	ArgsParser(argc, argv, "", "", &flag);
-	puts(u.machine);
+	TRY(uname(&uts), "uname");
+	ArgsParser(argc, argv, "s", "", &flag);
+
+	printf("%s", uts.machine);
+	if (!flag.s.state)
+		printf(".%s", uts.sysname);	
+	putchar('\n');
+
 	return EXIT_SUCCESS;
 }
 
 Noreturn void
 usage(void)
 {
-	printf("Usage: %s OPTION\n"
-	"Print machine hardware name (same as uname -m).\n\n", __progname);
+	printf("Usage: %s [OPTION]\n"
+	"Description: Print machine architecture.\n"
+	"\nOptions:\n", __progname);
+	print_opt("s", "Print only the architecture name");
+	printf("\nGeneral:\n");
 	HELP_USAGE_ABOUT();
 	VERSION_USAGE_ABOUT();
 	exit(EXIT_SUCCESS);

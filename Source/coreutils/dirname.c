@@ -29,11 +29,11 @@
 *  (BSD 3-Clause License)
 */
 
+#define _USE_NULL
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <libgen.h>
-#define _USE_NULL
 #include <system.h>
 #include <ArgParser.h>
 
@@ -45,9 +45,7 @@ main(int argc, char *argv[])
 	OptionVals flag = {0};
 	setprogname(argv[0]);
 	ArgsParser(argc, argv, "z", "", &flag);
-	
-	argc -= optindex;
-	argv += optindex;
+	Next(argc, argv);
 
 	if (argc == 0) {
 		fprintf(stderr, "%s: missing operand\n", __progname);
@@ -68,11 +66,13 @@ main(int argc, char *argv[])
 }
 
 Noreturn void
-usage()
+usage(void)
 {
 	printf("Usage: %s [OPTION] NAME...\n"
-	"Print NAME with any leading directory components removed.\n\n",__progname);
-        printf("%s      -z%s\n	end each output line with NUL, not newline\n", BOLD, REG);
+	"Description: Return the directory portion of the given path(s).\n"
+	"\nOptions:\n",__progname);
+	print_opt("z", "end each output line with NUL, not newline");
+	printf("\nGeneral:\n");
 	HELP_USAGE_ABOUT();
 	VERSION_USAGE_ABOUT();
 	exit(EXIT_SUCCESS);

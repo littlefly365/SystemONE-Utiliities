@@ -29,11 +29,12 @@
 *  (BSD 3-Clause License)
 */
 
+#define _USE_NULL
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#define _USE_NULL
+#include <err.h>
 #include <system.h>
 #include <ArgParser.h>
 
@@ -46,9 +47,7 @@ main(int argc, char *argv[])
 	char *path, *suffix = NULL;
 	setprogname(argv[0]);
 	ArgsParser(argc, argv, "asz", "s", &flag);
-
-	argc -= optindex;
-	argv += optindex;
+	Next(argc, argv);
 
 	if (argc == 0)
 		fprintf(stderr, "%s: missing operand\n", __progname);
@@ -59,7 +58,7 @@ main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	if (flag.a.state)
+	if (flag.a.state || flag.s.state)
 		num_args = argc;
 	if (!suffix && !flag.a.state && argc == 2)
 		suffix = argv[1];
@@ -93,12 +92,13 @@ Noreturn void
 usage(void)
 {
 	printf("Usage: %s NAME [SUFFIX]\n"
-	"  or:  %s OPTION... NAME...\n"
-	"Print NAME with any leading directory components removed.\n"
-	"If specified, also remove a trailing SUFFIX.\n\n", __progname, __progname);
-	printf("%s      -a%s\n	 support multiple arguments and treat each as a NAME\n", BOLD, REG);
-	printf("%s      -s%s\n	 remove a trailing SUFFIX; implies -a\n", BOLD, REG);
-	printf("%s      -z%s\n	 end each output line with NUL, not newline\n", BOLD, REG);
+	"  or:  %s [OPTION]... NAME...\n"
+	"Description: Return the filename portion of the given path.\n"
+	"\nOptions:\n", __progname, __progname);
+	print_opt("a", "support multiple arguments and treat each as a NAME");
+	print_opt("s", "remove a trailing SUFFIX; implies -a");
+	print_opt("z", "end each output line with NUL, not newline");
+	printf("\nGeneral:\n");
 	HELP_USAGE_ABOUT();
 	VERSION_USAGE_ABOUT();
 	exit(EXIT_SUCCESS);

@@ -20,7 +20,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 	for (int i = 0; i < argc; i++) {
 		for (int j = 0; argv[i][j] != '\0'; j++) {
 			if (argv[i][0] == '-') {
-				if (strcmp(argv[i], "--") == 0)
+				if ((strcmp(argv[i], "--") == 0) || argv[i][j + 1] == '\0')
 					return OK;
 				else if (strcmp(argv[i], "--help") == 0) {
 					usage();

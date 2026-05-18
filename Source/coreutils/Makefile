@@ -1,6 +1,6 @@
 #	$SystemONE: (coreutils) Makefile,v 1.0 2026/05/16	#
 
-PROGS=arch basename cat dirname false
+PROGS=arch basename cat dirname domainname false
 
 all: coreutils obj build
 

@@ -46,16 +46,12 @@
 #define Noreturn	__attribute__((noreturn))
 #endif
 
-#ifndef Used
-#define Used	__attribute__((used))
-#endif
-
 #ifndef HELP_USAGE_ABOUT
-#define HELP_USAGE_ABOUT() printf("%s      --help%s\n	 display this help and exit\n", BOLD, REG)
+#define HELP_USAGE_ABOUT() printf("%s   --help%s        Print help information\n", BOLD, REG)
 #endif
 
 #ifndef VERSION_USAGE_ABOUT
-#define VERSION_USAGE_ABOUT() printf("%s      --version%s\n	 output version information and exit\n", BOLD, REG)
+#define VERSION_USAGE_ABOUT() printf("%s   --version%s     Print version\n", BOLD, REG)
 #endif
 
 #ifndef try_msg
@@ -82,6 +78,13 @@
 #endif
 
 #define COREUTILS_AUTHORS	"littlefly365"
+
+#define Next(argc, argv)	\
+	argc -= optindex;	\
+	argv += optindex
+
+#define print_opt(opt, about)	\
+	printf("%s   -%s%s            %s\n", BOLD, opt, REG, about)
 
 char *one_basename(const char *string);
 
