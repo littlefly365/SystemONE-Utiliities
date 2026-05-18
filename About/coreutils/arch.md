@@ -24,7 +24,8 @@ command behaves similarly to the OpenBSD version.
 
 # Examples (Linux x86_64):
 
-`arch` ---> "x86_64.Linux"
+`[littlefly365@arch ~]$ arch` 
+x86_64.Linux
 
 `arch -s` ---> "x86_64"
 
