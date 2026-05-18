@@ -24,9 +24,7 @@ command behaves similarly to the OpenBSD version.
 
 # Examples (Linux x86_64):
 
-`[littlefly365@arch ~]$ arch` 
-x86_64.Linux
+`arch` -----> x86_64.Linux		
 
-`arch -s` ---> "x86_64"
+`arch -s` -----> x86_64
 
-`arch --version` ---> " arch (SystemONE coreutils) 1.0"
