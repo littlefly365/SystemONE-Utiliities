@@ -10,8 +10,22 @@ command behaves similarly to the OpenBSD version.
 | Options | Description                      |
 |---------|----------------------------------|
 |  `-s`   | Print only the architecture name |
+----------------------------------------------
 
 # General Options:
-`--help`         Print help information
 
-`--version`      Print version
+------------------------------------------------
+| General Options |    Description             |
+|-----------------|----------------------------|
+|  `--help`       |   Print help information   |
+|-----------------|----------------------------|
+| `--version`     |   Print version            |
+-----------------------------------------------|
+
+# Examples (Linux x86_64):
+
+`arch` ---> "x86_64.Linux"
+
+`arch -s` ---> "x86_64"
+
+`arch --version` ---> " arch (SystemONE coreutils) 1.0"
