@@ -34,4 +34,5 @@ command behaves similarly to the OpenBSD version.
 - 1: Returns 1 when an error has occurred (uname syscall).
 
 # Authors:
-Written by littlefly365
+
+- littlefly365
