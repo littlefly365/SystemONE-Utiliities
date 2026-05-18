@@ -44,8 +44,8 @@ main(int argc, char *argv[])
 	struct utsname uts;
 	OptionVals flag = {0};
 	setprogname(argv[0]);
-	TRY(uname(&uts), "uname");
 	ArgsParser(argc, argv, "s", "", &flag);
+	TRY(uname(&uts), "uname");
 
 	printf("%s", uts.machine);
 	if (!flag.s.state)
