@@ -34,52 +34,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <getopt.h>
 #include <unistd.h>
 #include <err.h>
-#include "aux.h"
+#include <system.h>
+#include <ArgParser.h>
 
 extern char **environ;
-
-struct option longopts[] = {
-	{"help", no_argument, 0, 1000},
-	{"version", no_argument, 0, 1001},
-	{0, 0, 0, 0}
-};
-
-static void usage(void);
 
 int
 main(int argc, char *argv[])
 {
-	int c, print_name = 0;
+	int print_name = 0;
 	char buf[512];
+	OptionVals flag = {0};
 	setprogname(argv[0]);
-	while ((c = getopt_long(argc, argv, "", longopts, NULL)) != -1) {
-		switch (c) {
-				case 1000:
-					usage();
-					break;
-				case 1001:
-					print_version();
-					break;
-				default:
-					fprintf(stderr, "Try '%s --help' for more information\n", __progname);
-					return EXIT_FAILURE;
-					break;
-			}
-		}
-
-	argc -= optind;
-	argv += optind;
+	ArgsParser(argc, argv, "", "", &flag);
+	Next(argc, argv);
 
 	if (argc == 0) {
 		fprintf(stderr, "%s: missing file arguments\n", __progname);
-		fprintf(stderr, "Try '%s --help' for more information\n", __progname);
+		try_msg();
 		return EXIT_FAILURE;
 	}
 	
-	if (argc >= 2)
+	if (argc > 1)
 		print_name=1;
 
 	int status = EXIT_SUCCESS;
@@ -90,11 +68,10 @@ main(int argc, char *argv[])
 	for (int i = 0; i < argc; i++) {
 		if (print_name)
 			printf("%s:\n", argv[i]);
-		if (strchr(argv[i], '/') == NULL) {
+		if (strchr(argv[i], '/') == NULL)
 			snprintf(buf, sizeof(buf), "./%s", argv[i]);
-		} else {
+		else
 			strlcpy(buf, argv[i], sizeof(buf));
-		}
 
 		if (access(buf, F_OK) != 0) {
 			fprintf(stderr, "%s: %s: No such file or directory\n", __progname, buf);
@@ -115,13 +92,13 @@ main(int argc, char *argv[])
 	return status;
 }
 
-static void
+Noreturn void
 usage(void)
 {
-	printf("Usage: %s [OPTION]... [FILE]...\n"
-		"print shared object dependencies\n\n"
-		"  --help    show this help and exit\n"
-		"  --version show version information and exit\n",
-	 __progname);
+	printf("Usage: %s [FILE]...\n"
+	"Description: Print shared object dependencies.\n"
+	"\nGeneral:\n", __progname);
+	HELP_USAGE_ABOUT();
+	VERSION_USAGE_ABOUT();
 	exit(EXIT_SUCCESS);
 }

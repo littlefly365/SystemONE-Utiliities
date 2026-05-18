@@ -31,69 +31,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
-#include <system.h>
-#include <ArgParser.h>
+#include <string.h>
 
-int
-main(int argc, char *argv[])
+#define CUSTOM_VERSION	"1.0"
+
+void
+print_version()
 {
-	int number;
-	int aux = 3, no_prime = 0;
-	OptionVals flag = {0};
-	setprogname(argv[0]);
-	ArgsParser(argc, argv, "q", "", &flag);
-	Next(argc, argv);
-
-	if (argc == 0) {
-		fprintf(stderr, "%s: missing operand\n", __progname);
-		try_msg();
-		return EXIT_FAILURE;
-	}
-
-	for (int i = 0; argv[0][i] != '\0'; i++) {
-		if (!isdigit(argv[0][i]) || atoi(argv[0]) <= 0) {
-			fprintf(stderr, "%s: '%s' is not a valid positive number\n", __progname, argv[0]);
-			return EXIT_FAILURE;
-		}
-	}
-
-	number = atoi(argv[0]);
-
-	if ((number % 2 == 0 &&  number != 2) || (number == 1))
-		no_prime = 1;
-
-	while (!no_prime && aux < number / aux) {
-		if (number % aux == 0)
-			no_prime = 1;
-		aux+=2;
-	}	
-
-	if (!no_prime) {
-		if (!flag.q.state)
-			printf("%d is prime\n", number);
-		else
-			return EXIT_SUCCESS;
-	} else {
-		if (!flag.q.state)
-			printf("%d is not prime\n", number);
-		else
-			return EXIT_FAILURE;
-	}
-
-	if (!flag.q.state)
-		return EXIT_SUCCESS;
-}
-
-Noreturn void
-usage(void)
-{
-	printf("Usage: %s [OPTION] NUMBER\n"
-	"Description: Print if a number is prime or not.\n"
-	"\nOptions:\n", __progname);
-	print_opt("q", "only return 0 if number is prime else return 1");
-	printf("\nGeneral:\n");
-	HELP_USAGE_ABOUT();
-	VERSION_USAGE_ABOUT();
+	printf("%s (SystemONE tools) %s\n", __progname, CUSTOM_VERSION);
 	exit(EXIT_SUCCESS);
 }

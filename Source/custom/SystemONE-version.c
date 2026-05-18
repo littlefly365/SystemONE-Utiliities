@@ -29,50 +29,42 @@
 *  (BSD 3-Clause License)
 */
 
-#include "utils.h"
-#include "aux.h"
-#include "info.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <system.h>
+#include <ArgParser.h>
 
-#define PROGNAME "SystemONE-version" 
-
-static char USAGE[] =
-	"Usage: " PROGNAME " [OPTION]\n"
-	"Show information about SystemONE.\n\n"	
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit";
-
-#define WHITE "\x1B[1m"
-#define RESET "\x1B[0m"
+#define SYSTEM_VERSION	"1.0"
+#define PROJECT_VERSION	"26.5"
+#define AUTHOR	"littlefly365"
 
 int
 main(int argc, char *argv[])
 {
-	int c;
-	while ((c = getopt(argc, argv, "hV")) != -1) {
-		switch (c) {
-			case 'h':
-				puts(USAGE);
-				return SUCCESS;
-				break;
-			case 'V':
-				print_version(PROGNAME);
-				return SUCCESS;
-				break;
-			default:
-				try_msg();
-				break;
-		}
-	}
+	OptionVals flag = {0};
+	setprogname(argv[0]);
+	ArgsParser(argc, argv, "", "", &flag);
 
-	printf("\t %s####%s\t\tSystemONE %s\n", WHITE, RESET, SYSTEM_VERSION);
-	printf("\t%s######%s\t\tThe SystemONE-Utilities project. v%s\n", WHITE, RESET, PROJECT_VERSION);
-	printf("\t %s#####%s\t\tCopyright (C) 2026 SystemONE\n", WHITE, RESET);
-	printf("\t %s#####%s\t\tCopyright (C) 2026 %s\n", WHITE, RESET, AUTHOR);
-	printf("\t %s#####%s\n", WHITE, RESET);
-	printf("\t %s#####%s\n", WHITE, RESET);
-	printf("\t %s#####%s\t\tThis set of programs may be freely redistributed under\n", WHITE, RESET);
-	printf("\t %s#####%s\t\tThe terms of the BSD 3-Clause license.\n", WHITE, RESET);
-	printf("\t %s#####%s\n", WHITE, RESET);
-	printf("\t%s#######%s\t\tReport bugs to: <https://github.com/littlefly365/SystemONE-Utiliities>\n", WHITE, RESET);
-	return SUCCESS;
+	printf("\t %s####%s\t\tSystemONE %s\n", BOLD, REG, SYSTEM_VERSION);
+	printf("\t%s######%s\t\tThe SystemONE-Utilities project. v%s\n", BOLD, REG, PROJECT_VERSION);
+	printf("\t %s#####%s\t\tCopyright (C) 2026 SystemONE\n", BOLD, REG);
+	printf("\t %s#####%s\t\tCopyright (C) 2026 %s\n", BOLD, REG, AUTHOR);
+	printf("\t %s#####%s\n", BOLD, REG);
+	printf("\t %s#####%s\n", BOLD, REG);
+	printf("\t %s#####%s\t\tThis set of programs may be freely redistributed under\n", BOLD, REG);
+	printf("\t %s#####%s\t\tThe terms of the BSD 3-Clause license.\n", BOLD, REG);
+	printf("\t %s#####%s\n", BOLD, REG);
+	printf("\t%s#######%s\t\tReport bugs to: <https://github.com/littlefly365/SystemONE-Utiliities>\n", BOLD, REG);
+	return EXIT_SUCCESS;
+}
+
+Noreturn void
+usage(void)
+{
+	printf("Usage: %s\n"
+	"Description: Print information about SystemONE.\n"
+	"\nGeneral:\n", __progname);
+	HELP_USAGE_ABOUT();
+	VERSION_USAGE_ABOUT();
+	exit(EXIT_SUCCESS);
 }

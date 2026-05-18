@@ -1,3 +1,34 @@
+/*
+*  Copyright (c) 2026, littlefly365
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1. Redistributions of source code must retain the above copyright notice, this
+*     list of conditions and the following disclaimer.
+*
+*  2. Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3. Neither the name of the copyright holder nor the names of its
+*     contributors may be used to endorse or promote products derived from
+*     this software without specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+*  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+*  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+*  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+*  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+*  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+*  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+*  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*
+*  (BSD 3-Clause License)
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -15,10 +46,13 @@ int print_error = 1;
 int optindex = 1;
 
 int
-ArgsParser(int argc, char *argv[], const char *opts, const char *required_arguments, OptionVals *flag)
+ArgsParser(int argc, char *argv[], const char *opts, const char *need_arguments, OptionVals *flag)
 {
-	for (int i = 0; i < argc; i++) {
+	bool posix = false;
+	for (int i = 1; i < argc; i++) {
 		for (int j = 0; argv[i][j] != '\0'; j++) {
+			if (argv[i][0] != '-')
+				posix = true;
 			if (argv[i][0] == '-') {
 				if ((strcmp(argv[i], "--") == 0) || argv[i][j + 1] == '\0')
 					return OK;
@@ -33,7 +67,8 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 				}
 
 				if (j == 0) {
-					optindex++;
+					if (!posix)
+						optindex++;
 					j++;
 				}
 				if (strcmp(opts, NO_ERRORS) != 0) {
@@ -46,7 +81,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 
 				switch (argv[i][j]) {
 					case 'a':
-						if (strrchr(required_arguments, 'a') != NULL) {
+						if (strrchr(need_arguments, 'a') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->a.content = argv[i + 1];
 							else {
@@ -58,7 +93,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->a.state = true;
 						break;
 					case 'b':
-						if (strrchr(required_arguments, 'b') != NULL) {
+						if (strrchr(need_arguments, 'b') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->b.content = argv[i + 1];
 							else {
@@ -70,7 +105,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->b.state = true;
 						break;
 					case 'c':
-						if (strrchr(required_arguments, 'c') != NULL) {
+						if (strrchr(need_arguments, 'c') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->c.content = argv[i + 1];
 							else {
@@ -82,7 +117,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->c.state = true;
 						break;
 					case 'd':
-						if (strrchr(required_arguments, 'd') != NULL) {
+						if (strrchr(need_arguments, 'd') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->d.content = argv[i + 1];
 							else {
@@ -94,7 +129,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->d.state = true;
 						break;
 					case 'e':
-						if (strrchr(required_arguments, 'e') != NULL) {
+						if (strrchr(need_arguments, 'e') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->e.content = argv[i + 1];
 							else {
@@ -106,7 +141,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->e.state = true;
 						break;
 					case 'f':
-						if (strrchr(required_arguments, 'f') != NULL) {
+						if (strrchr(need_arguments, 'f') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->f.content = argv[i + 1];
 							else {
@@ -118,7 +153,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->f.state = true;
 						break;
 					case 'g':
-						if (strrchr(required_arguments, 'g') != NULL) {
+						if (strrchr(need_arguments, 'g') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->g.content = argv[i + 1];
 							else {
@@ -130,7 +165,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->g.state = true;
 						break;
 					case 'h':
-						if (strrchr(required_arguments, 'h') != NULL) {
+						if (strrchr(need_arguments, 'h') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->h.content = argv[i + 1];
 							else {
@@ -142,7 +177,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->h.state = true;
 						break;
 					case 'i':
-						if (strrchr(required_arguments, 'i') != NULL) {
+						if (strrchr(need_arguments, 'i') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->i.content = argv[i + 1];
 							else {
@@ -154,7 +189,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->i.state = true;
 						break;
 					case 'j':
-						if (strrchr(required_arguments, 'j') != NULL) {
+						if (strrchr(need_arguments, 'j') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->j.content = argv[i + 1];
 							else {
@@ -166,7 +201,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->j.state = true;
 						break;
 					case 'k':
-						if (strrchr(required_arguments, 'k') != NULL) {
+						if (strrchr(need_arguments, 'k') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->k.content = argv[i + 1];
 							else {
@@ -178,7 +213,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->k.state = true;
 						break;
 					case 'l':
-						if (strrchr(required_arguments, 'l') != NULL) {
+						if (strrchr(need_arguments, 'l') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->l.content = argv[i + 1];
 							else {
@@ -190,7 +225,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->l.state = true;
 						break;
 					case 'm':
-						if (strrchr(required_arguments, 'm') != NULL) {
+						if (strrchr(need_arguments, 'm') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->m.content = argv[i + 1];
 							else {
@@ -202,7 +237,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->m.state = true;
 						break;
 					case 'n':
-						if (strrchr(required_arguments, 'n') != NULL) {
+						if (strrchr(need_arguments, 'n') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->n.content = argv[i + 1];
 							else {
@@ -211,10 +246,11 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 								exit(ERROR);
 							}
 						}
-						flag->n.state = true;
+						if (!posix)
+							flag->n.state = true;
 						break;
 					case 'o':
-						if (strrchr(required_arguments, 'o') != NULL) {
+						if (strrchr(need_arguments, 'o') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->o.content = argv[i + 1];
 							else {
@@ -226,7 +262,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->o.state = true;
 						break;
 					case 'p':
-						if (strrchr(required_arguments, 'p') != NULL) {
+						if (strrchr(need_arguments, 'p') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->p.content = argv[i + 1];
 							else {
@@ -238,7 +274,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->p.state = true;
 						break;
 					case 'q':
-						if (strrchr(required_arguments, 'q') != NULL) {
+						if (strrchr(need_arguments, 'q') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->q.content = argv[i + 1];
 							else {
@@ -250,7 +286,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->q.state = true;
 						break;
 					case 'r':
-						if (strrchr(required_arguments, 's') != NULL) {
+						if (strrchr(need_arguments, 's') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->r.content = argv[i + 1];
 							else {
@@ -262,7 +298,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->r.state = true;
 						break;
 					case 's':
-						if (strrchr(required_arguments, 's') != NULL) {
+						if (strrchr(need_arguments, 's') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->s.content = argv[i + 1];
 							else {
@@ -274,7 +310,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->s.state = true;
 						break;
 					case 't':
-						if (strrchr(required_arguments, 't') != NULL) {
+						if (strrchr(need_arguments, 't') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->t.content = argv[i + 1];
 							else {
@@ -286,7 +322,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->t.state = true;
 						break;
 					case 'u':
-						if (strrchr(required_arguments, 'u') != NULL) {
+						if (strrchr(need_arguments, 'u') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->u.content = argv[i + 1];
 							else {
@@ -298,7 +334,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->u.state = true;
 						break;
 					case 'v':
-						if (strrchr(required_arguments, 'v') != NULL) {
+						if (strrchr(need_arguments, 'v') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->v.content = argv[i + 1];
 							else {
@@ -310,7 +346,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->v.state = true;
 						break;
 					case 'w':
-						if (strrchr(required_arguments, 'w') != NULL) {
+						if (strrchr(need_arguments, 'w') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->w.content = argv[i + 1];
 							else {
@@ -322,7 +358,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->w.state = true;
 						break;
 					case 'x':
-						if (strrchr(required_arguments, 'x') != NULL) {
+						if (strrchr(need_arguments, 'x') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->x.content = argv[i + 1];
 							else {
@@ -334,7 +370,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->x.state = true;
 						break;
 					case 'y':
-						if (strrchr(required_arguments, 'y') != NULL) {
+						if (strrchr(need_arguments, 'y') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->y.content = argv[i + 1];
 							else {
@@ -346,7 +382,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *required_argume
 						flag->y.state = true;
 						break;
 					case 'z':
-						if (strrchr(required_arguments, 'z') != NULL) {
+						if (strrchr(need_arguments, 'z') != NULL) {
 							if (argv[i + 1] != NULL && argv[i + 1][0] != '-')
 								flag->z.content = argv[i + 1];
 							else {

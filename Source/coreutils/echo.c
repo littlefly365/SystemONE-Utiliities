@@ -29,65 +29,40 @@
 *  (BSD 3-Clause License)
 */
 
-#include "utils.h"
-#include "aux.h"
-#include "info.h"
-
-static struct option longopts[] = {
-	{"no-newline", no_argument, 0, 'n'},
-        {"help", no_argument, 0, HOPT},
-        {"version", no_argument, 0, VOPT},
-        {0, 0, 0, 0}
-};
-
-static void usage(void);
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <system.h>
+#include <ArgParser.h>
 
 int
 main(int argc, char *argv[])
 {
-	int c;
-	Options opt = {0};
-	char buf[1024];
-	while ((c = getopt_long(argc, argv, "n", longopts, NULL)) != -1) {
-		switch (c) {
-			case HOPT:
-				usage();
-				break;
-			case 'n':
-				opt.n = 1;
-				break;
-			case VOPT:
-				print_version();
-				break;
-			default:
-				fprintf(stderr, "Try '%s --help' for more information\n", __progname);
-				return FAIL;
-				break;
-		}
-	}
-
-	argc -= optind;
-	argv += optind;
+	OptionVals flag = {0};
+	setprogname(argv[0]);
+	ArgsParser(argc, argv, "n", "", &flag);
+	Next(argc, argv);
 
 	for (int i = 0; i < argc; i++) {
 		if (i)
 			putchar(' ');
-		fputs(buf, stdout);
+		fputs(argv[i], stdout);
 	}
 
-	if (!opt.n)
+	if (!flag.n.state)
 		putchar('\n');
-	return SUCCESS;
+	return EXIT_SUCCESS;
 }
 
-static void
+Noreturn void
 usage(void)
 {
-        printf("Usage: %s [OPTION]... [STRING]...\n"
-        "Echo the STRING(s) to standard output.\n\n"
-        "  -n, --no-newline\tdo not print newline\n"
-        "  --help\tshow this help and exit\n"
-	"  --version\tshow version information and exit\n",
-	__progname);
-	exit(SUCCESS);
+	printf("Usage: %s [OPTION] [STRING]...\n"
+	"Description: Echo the STRING(s) to standard output.\n"
+	"\nGeneral:\n", __progname);
+	print_opt("n", "do not print newline");
+	printf("\nOptions:\n");
+	HELP_USAGE_ABOUT();
+	VERSION_USAGE_ABOUT();
+	exit(EXIT_SUCCESS);
 }

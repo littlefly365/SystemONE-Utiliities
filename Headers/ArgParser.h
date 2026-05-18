@@ -48,7 +48,7 @@ typedef struct {
 
 #define NO_ERRORS	"no_errors"
 
-int ArgsParser(int argc, char *argv[], const char *opts, const char *required_argument, OptionVals *flag);
+int ArgsParser(int argc, char *argv[], const char *opts, const char *need_argument, OptionVals *flag);
 Noreturn void usage(void);
 int print_version(void);
 
