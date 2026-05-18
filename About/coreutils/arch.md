@@ -13,4 +13,5 @@ command behaves similarly to the OpenBSD version.
 
 # General Options:
 `--help`         Print help information
+
 `--version`      Print version
