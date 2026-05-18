@@ -54,7 +54,11 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *need_arguments,
 			if (argv[i][0] != '-')
 				posix = true;
 			if (argv[i][0] == '-') {
-				if ((strcmp(argv[i], "--") == 0) || argv[i][j + 1] == '\0')
+				if (strcmp(argv[i], "--") == 0){
+					optindex++;
+					return OK;
+				}
+				else if(argv[i][j + 1] == '\0')
 					return OK;
 				else if (strcmp(argv[i], "--help") == 0) {
 					usage();
