@@ -19,7 +19,7 @@ command behaves similarly to the OpenBSD version.
 | General Options |    Description             |
 |-----------------|----------------------------|
 |  `--help`       |   Print help information   |
-------------------------------------------------
+|----------------------------------------------|
 | `--version`     |   Print version            |
 ------------------------------------------------
 
