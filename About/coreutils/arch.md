@@ -28,3 +28,10 @@ command behaves similarly to the OpenBSD version.
 
 `arch -s` -> x86_64
 
+# Exit code:
+
+- 0: Returns 0 if there was no error.
+- 1: Returns 1 when an error has occurred (uname syscall).
+
+# Authors:
+Written by littlefly365
