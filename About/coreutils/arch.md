@@ -33,6 +33,10 @@ command behaves similarly to the OpenBSD version.
 - 0: Returns 0 if there was no error.
 - 1: Returns 1 when an error has occurred (uname syscall).
 
+# GNU Compatibility:
+
+- It behaves the same if the -s flag has been used.
+
 # Authors:
 
 - littlefly365
