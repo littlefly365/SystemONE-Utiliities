@@ -40,4 +40,4 @@ command behaves similarly to the OpenBSD version.
 
 # Authors:
 
-- [littlefly365] (https://github.com/cristianherrera26)
+- [littlefly365](https://github.com/cristianherrera26)
