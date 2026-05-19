@@ -6,8 +6,7 @@
 
 enum {
         OK = 0,
-        ERROR = 1,
-        UNKNOWN = 2
+        ERROR = 2,
 };
 
 typedef struct {

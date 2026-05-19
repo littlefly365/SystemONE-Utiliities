@@ -62,12 +62,12 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *need_arguments,
 					return OK;
 				else if (strcmp(argv[i], "--help") == 0) {
 					usage();
-					exit(ERROR);
+					exit(1);
 				}
 
 				else if (strcmp(argv[i], "--version") == 0) {
 					print_version();
-					exit(ERROR);
+					exit(1);
 				}
 
 				if (j == 0) {
@@ -81,7 +81,7 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *need_arguments,
 							fprintf(stderr, "%s: unrecognized option '-%c'\n", PROGNAME, argv[i][j]);
 							try_msg();
 						}
-						exit(UNKNOWN);
+						exit(ERROR);
 					}
 				}
 
