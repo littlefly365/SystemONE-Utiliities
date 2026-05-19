@@ -30,7 +30,7 @@
 */
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <one_stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
@@ -42,7 +42,7 @@
 int
 main(int argc, char *argv[])
 {
-	int fd, i;
+	int fd, i = 0;
 	int status = EXIT_SUCCESS;
 	char buf[4096];
 	ssize_t size;
@@ -61,7 +61,7 @@ main(int argc, char *argv[])
 			status = EXIT_FAILURE;
 		}
 		while ((size = read(fd, buf, sizeof(buf))) > 0)
-			write(STDOUT_FILENO, buf, size);
+			write(STDOUT_FILENO, buf, (size_t)size);
 		if (fd != STDIN_FILENO)
 			close(fd);
 	} while (++i < argc);

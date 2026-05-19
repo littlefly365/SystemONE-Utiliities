@@ -31,7 +31,7 @@
 
 #define _USE_NULL
 #include <stdio.h>
-#include <stdlib.h>
+#include <one_stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <err.h>
@@ -41,7 +41,6 @@
 int
 main(int argc, char *argv[])
 {
-	int c;
 	int num_args = 1;
 	OptionVals flag = {0};
 	char *path, *suffix = NULL;
@@ -70,8 +69,8 @@ main(int argc, char *argv[])
 		else {
 			TRY(path = one_basename(argv[i]), argv[i]);
 			if (suffix) {
-				int path_len = strlen(path);
-				int suffix_len = strlen(suffix);
+				size_t path_len = strlen(path);
+				size_t suffix_len = strlen(suffix);
 				if (path_len > suffix_len && strcmp(path + path_len - suffix_len, suffix) == 0)
 					path[path_len - suffix_len] = '\0';
 			}

@@ -30,7 +30,7 @@
 #ifndef _ONE_STDLIB_H
 #define _ONE_STDLIB_H	1
 
-#include_next <stdlib.h>
+#include <stdlib.h>
 
 extern char *__progname;
 char *getprogname(void);

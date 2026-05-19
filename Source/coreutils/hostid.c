@@ -29,51 +29,32 @@
 *  (BSD 3-Clause License)
 */
 
-#include "utils.h"
-#include "aux.h"
-#include "info.h"
-
-static struct option longopts[] = {
-	{"help", no_argument, 0, HOPT},
-	{"version", no_argument, 0, VOPT},
-	{0, 0, 0, 0}
-};
-
-static void usage(void);
+#include <stdio.h>
+#include <one_stdlib.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <system.h>
+#include <ArgParser.h>
 
 int
 main(int argc, char *argv[])
 {
-	int c;
 	unsigned long hostid;
+	OptionVals flag = {0};
 	setprogname(argv[0]);
-	while ((c = getopt_long(argc, argv, "", longopts, NULL)) != -1) {
-		switch (c) {
-			case HOPT:
-				usage();
-				break;
-			case VOPT:
-				print_version();
-				break;
-			default:
-				fprintf(stderr, "Try '%s --help' for more information\n", __progname);
-				return FAIL;
-				break;
-			}
-		}
-
+	ArgsParser(argc, argv, "", "", &flag);
 	hostid = gethostid() & 0xFFFFFFFF;
 	printf("%08lx\n", hostid);
-	return SUCCESS;
+	return EXIT_SUCCESS;
 }
 
-static void
+Noreturn void
 usage(void)
 {
-	printf("Usage: %s [OPTION]\n"
-	"Print the numeric identifier (in hexadecimal) for the current host.\n\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit",
-	__progname);
-	exit(SUCCESS);
+	printf("Usage: %s\n"
+	"Description: Print the numeric identifier (in hexadecimal) for the current host.\n"
+	"\nGeneral:\n", __progname);
+	HELP_USAGE_ABOUT();
+	VERSION_USAGE_ABOUT();
+	exit(EXIT_SUCCESS);
 }

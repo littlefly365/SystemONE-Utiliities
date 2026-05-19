@@ -31,7 +31,7 @@
 
 #include <sys/utsname.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <one_stdlib.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include <err.h>

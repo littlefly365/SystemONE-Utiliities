@@ -1,25 +1,24 @@
-#	$SystemONE: (coreutils) Makefile,v 1.0 2026/05/18	#
+#	$SystemONE: (coreutils) Makefile,v 1.2 2026/05/18	#
 
-PROGS=arch basename cat dirname domainname echo false
+PROGS=arch basename cat dirname domainname echo false hostid hostname
+ROOT?= ../..
 
-all: coreutils obj build
+all: coreutils build
 
-build: obj
-	mkdir -p build/
+build: coreutils
+	mkdir -p $(ROOT)/build/
 	for i in $(PROGS); do \
-		$(CC) -o build/$$i obj/$$i.o obj/coreutils.o -L../libcommon -lcommon; \
-	done
-obj:
-	for i in $(PROGS); do \
-		$(CC) -o obj/$$i.o -c $$i.c -I../../Headers; \
+		$(CC) -o $(ROOT)/build/$$i $$i.c coreutils.o $(CPPFLAGS) -I../../Headers -L../libcommon -lcommon; \
 	done
 coreutils:
-	mkdir -p obj/
-	$(CC) -o obj/coreutils.o -c coreutils.c -I../../Headers
+	$(CC) -o coreutils.o -c coreutils.c -I../../Headers
 clean: 
-	rm -rf obj build
+	for i in $(PROGS); do \
+		rm -rf $(ROOT)/build/$$i; \
+	done
+	rm -rf coreutils.o
 install:
 	for i in $(PROGS); do \
 		install -Dm755 build/$$i $(DESTDIR)$(BINDIR)/$$i; \
 	done
-.PHONY: all $(PROG) build obj clean install
+.PHONY: all $(PROG) build coreutils clean install

@@ -32,14 +32,12 @@
 #define _GNU_SOURCE
 #include <sys/wait.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <one_stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <err.h>
 #include <system.h>
 #include <ArgParser.h>
-
-extern char **environ;
 
 int
 main(int argc, char *argv[])

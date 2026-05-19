@@ -2,6 +2,7 @@
 #define _ARGPARSER_H	1
 
 #include <system.h>
+#include <stdbool.h>
 
 enum {
         OK = 0,

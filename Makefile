@@ -1,3 +1,6 @@
+ROOT=$(CURDIR)
+export ROOT
+
 all:
 	$(MAKE) -C Source all
 clean:

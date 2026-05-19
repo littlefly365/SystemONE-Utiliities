@@ -29,65 +29,47 @@
 *  (BSD 3-Clause License)
 */
 
-#include "utils.h"
-#include "aux.h"
-#include "info.h"
-
-static struct option longopts[] = {
-	{"help", no_argument, 0, HOPT},
-	{"version", no_argument, 0, VOPT},
-	{0, 0, 0, 0}
-};
-
-static void usage(void);
+#include <sys/param.h>
+#include <stdio.h>
+#include <one_stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <system.h>
+#include <ArgParser.h>
 
 int
 main(int argc, char *argv[])
 {
-	int c;
 	char hostname[MAXHOSTNAMELEN];
+	OptionVals flag = {0};
 	setprogname(argv[0]);
-	while ((c = getopt_long(argc, argv, "", longopts, NULL)) != -1) {
-		switch (c) {
-			case HOPT:
-				usage();
-				break;
-			case VOPT:
-				print_version();
-				break;
-			default:
-				fprintf(stderr, "Try '%s --help' for more information\n", __progname);
-				return FAIL;
-				break;
-			}
-		}
+	ArgsParser(argc, argv, "", "", &flag);
+	Next(argc, argv);
 
-	argc -= optind;
-	argv += optind;
+	if (argc > 1) {
+		fprintf(stderr, "%s: extra operand '%s'\n", __progname, argv[1]);
+		try_msg();
+		return EXIT_FAILURE;
+	}
 
-	if (*argv) { 
-		if (sethostname(*argv, strlen(*argv)))
-			err(FAIL, "sethostname");
-
-		return SUCCESS;
-	} else {
-		if (gethostname(hostname, sizeof(hostname)))
-			err(FAIL, "gethostname");
-
+	if (argc == 1) 
+		TRY(sethostname(*argv, strlen(*argv)), "sethostname");
+	else {
+		TRY(gethostname(hostname, sizeof(hostname)), "gethostname");
 		puts(hostname);
 	}
 
-	return SUCCESS;
+	return EXIT_SUCCESS;
 }
 
-static void
+Noreturn void
 usage(void)
 {
-	printf("Usage: %s [OPTION]... [NAME]\n"
-	"Show or set the system's host name.\n\n"
-	"\t-h\t\tshow this help and exit\n"
-	"\t-V\t\tshow version information and exit", 
-	__progname);
-	exit(SUCCESS);
-
+	printf("Usage: %s [NAME]\n"
+	"Description: Show or set the system's host name.\n"
+	"\nGeneral:\n", __progname);
+	HELP_USAGE_ABOUT();
+	VERSION_USAGE_ABOUT();
+	exit(EXIT_SUCCESS);
 }

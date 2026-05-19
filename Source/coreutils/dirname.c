@@ -31,7 +31,7 @@
 
 #define _USE_NULL
 #include <stdio.h>
-#include <stdlib.h>
+#include <one_stdlib.h>
 #include <stdbool.h>
 #include <libgen.h>
 #include <system.h>
@@ -40,7 +40,6 @@
 int
 main(int argc, char *argv[])
 {
-	int c;
 	char *dir;
 	OptionVals flag = {0};
 	setprogname(argv[0]);

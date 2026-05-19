@@ -30,7 +30,7 @@
 */
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <one_stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <libgen.h>
@@ -77,8 +77,10 @@ ArgsParser(int argc, char *argv[], const char *opts, const char *need_arguments,
 				}
 				if (strcmp(opts, NO_ERRORS) != 0) {
 					if (strrchr(opts, argv[i][j]) == NULL) {
-						if (print_error)
+						if (print_error) {
 							fprintf(stderr, "%s: unrecognized option '-%c'\n", PROGNAME, argv[i][j]);
+							try_msg();
+						}
 						exit(UNKNOWN);
 					}
 				}

@@ -30,7 +30,7 @@
 */
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <one_stdlib.h>
 #include <string.h>
 
 #define COREUTILS_VERSION	"1.0"

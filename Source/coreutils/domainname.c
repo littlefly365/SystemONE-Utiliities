@@ -31,7 +31,7 @@
 
 #include <sys/param.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <one_stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdbool.h>
