@@ -32,7 +32,7 @@ command behaves similarly to the OpenBSD version.
 
 - 0: Returns 0 if there was no error.
 - 1: Returns 1 when an error has occurred in the program (example: uname syscall).
-- 2: Returns 2 when an error has ocurred in the option parser (example: unknown option or bad usage).
+- 2: Returns 2 when an error has occurred in the option parser (example: unknown option or bad usage).
 
 # GNU Compatibility:
 
