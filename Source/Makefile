@@ -1,4 +1,4 @@
-ROOT ?=../
+ROOT ?=..
 
 all: libcommon progs
 
